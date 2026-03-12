@@ -611,10 +611,10 @@ namespace DC_Button_Finder
         }
 
         private async Task<bool> EnterCombatLoopAsync(
-            string targetType,
-            string targetName,
-            BotSettings settings,
-            string attackMode)
+    string targetType,
+    string targetName,
+    BotSettings settings,
+    string attackMode)
         {
             _logger.Info($"Вход в бой с {targetType}: {targetName}");
 
@@ -643,7 +643,7 @@ namespace DC_Button_Finder
                             {
                                 _logger.Info("Урон уже нанесен - выходим из боя");
 
-                                await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском back_1
+                                await RandomDelayAsync(311, 437);
 
                                 var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                                 if (backTemplate != null)
@@ -651,13 +651,13 @@ namespace DC_Button_Finder
                                     var backMatch = _templateMatcher.FindTemplate(checkScreenshot, backTemplate, "back_1", settings.ThresholdPercentage / 100.0);
                                     if (backMatch.Found)
                                     {
-                                        await RandomDelayAsync(170, 237); // ЗАДЕРЖКА перед кликом
+                                        await RandomDelayAsync(170, 237);
 
                                         var backPoint = backMatch.GetRandomPointInTemplate(_random);
                                         backPoint = _screenshotService.ConvertFromButtonsAreaCoords(backPoint);
                                         _clicker.ClickAtPosition(backPoint);
 
-                                        await RandomDelayAsync(311, 437); // ЗАДЕРЖКА после клика
+                                        await RandomDelayAsync(311, 437);
                                         _logger.Success($"Выход из боя с {targetType} (только царапать)");
                                         return true;
                                     }
@@ -682,19 +682,19 @@ namespace DC_Button_Finder
                         var attackTemplate = _templateCache.GetCachedButtonImage(attackMode, false);
                         if (attackTemplate != null)
                         {
-                            await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском
+                            await RandomDelayAsync(311, 437);
 
                             var attackMatch = _templateMatcher.FindTemplate(attackScreenshot, attackTemplate, attackMode, settings.ThresholdPercentage / 100.0);
                             if (attackMatch.Found)
                             {
-                                await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед кликом
+                                await RandomDelayAsync(311, 437);
 
                                 var attackPoint = attackMatch.GetRandomPointInTemplate(_random);
                                 attackPoint = _screenshotService.ConvertFromButtonsAreaCoords(attackPoint);
                                 _clicker.ClickAtPosition(attackPoint);
 
                                 _logger.Success($"Нажата {attackMode} в бою");
-                                await RandomDelayAsync(311, 437); // ЗАДЕРЖКА после клика
+                                await RandomDelayAsync(311, 437);
                                 actionPerformed = true;
 
                                 if (settings.OnlyScratch)
@@ -710,7 +710,7 @@ namespace DC_Button_Finder
                     // Если урон уже нанесен и мы не атакуем - ищем back_1 для выхода
                     using (var checkScreenshot = _screenshotService.GetButtonsAreaScreenshot())
                     {
-                        await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском back_1
+                        await RandomDelayAsync(311, 437);
 
                         var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                         if (backTemplate != null)
@@ -718,13 +718,13 @@ namespace DC_Button_Finder
                             var backMatch = _templateMatcher.FindTemplate(checkScreenshot, backTemplate, "back_1", settings.ThresholdPercentage / 100.0);
                             if (backMatch.Found)
                             {
-                                await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед кликом
+                                await RandomDelayAsync(311, 437);
 
                                 var backPoint = backMatch.GetRandomPointInTemplate(_random);
                                 backPoint = _screenshotService.ConvertFromButtonsAreaCoords(backPoint);
                                 _clicker.ClickAtPosition(backPoint);
 
-                                await RandomDelayAsync(311, 437); // ЗАДЕРЖКА после клика
+                                await RandomDelayAsync(311, 437);
                                 _logger.Success($"Выход из боя с {targetType}");
                                 return true;
                             }
@@ -732,10 +732,10 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 3. Проверяем bestAttack (монстр убит)
+                // 3. ПРОВЕРЯЕМ BESTATTACK (монстр убит)
                 using (var checkScreenshot = _screenshotService.GetButtonsAreaScreenshot())
                 {
-                    await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском bestAttack
+                    await RandomDelayAsync(311, 437);
 
                     var bestTemplate = _templateCache.GetCachedButtonImage("bestAttack", false);
                     if (bestTemplate != null)
@@ -745,25 +745,56 @@ namespace DC_Button_Finder
                         {
                             _logger.Info($"Обнаружена bestAttack - {targetType} убит");
 
-                            await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском back_1
+                            await RandomDelayAsync(311, 437);
 
+                            // 🔹 ШАГ 1: Обязательно ищем OK (даже если не найден — продолжаем)
+                            bool okPressed = false;
+                            var okTemplate = _templateCache.GetCachedButtonImage("ok", false);
+                            if (okTemplate != null)
+                            {
+                                var okMatch = _templateMatcher.FindTemplate(checkScreenshot, okTemplate, "ok", settings.ThresholdPercentage / 100.0);
+                                if (okMatch.Found)
+                                {
+                                    await RandomDelayAsync(311, 437);
+
+                                    var okPoint = okMatch.GetRandomPointInTemplate(_random);
+                                    okPoint = _screenshotService.ConvertFromButtonsAreaCoords(okPoint);
+                                    _clicker.ClickAtPosition(okPoint);
+
+                                    _logger.Success("Нажата OK после победы");
+                                    await RandomDelayAsync(311, 437);
+                                    okPressed = true;
+                                    actionPerformed = true;
+                                }
+                            }
+
+                            // 🔹 ШАГ 2: Всегда ищем back_1 для выхода
                             var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                             if (backTemplate != null)
                             {
                                 var backMatch = _templateMatcher.FindTemplate(checkScreenshot, backTemplate, "back_1", settings.ThresholdPercentage / 100.0);
                                 if (backMatch.Found)
                                 {
-                                    await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед кликом
+                                    await RandomDelayAsync(311, 437);
 
                                     var backPoint = backMatch.GetRandomPointInTemplate(_random);
                                     backPoint = _screenshotService.ConvertFromButtonsAreaCoords(backPoint);
                                     _clicker.ClickAtPosition(backPoint);
 
-                                    await RandomDelayAsync(311, 437); // ЗАДЕРЖКА после клика
-                                    _logger.Success($"Выход из боя с {targetType}");
+                                    await RandomDelayAsync(311, 437);
+
+                                    if (okPressed)
+                                        _logger.Success($"Выход из боя с {targetType} (OK + назад)");
+                                    else
+                                        _logger.Warn($"OK не найден, но назад нажат — выход из боя с {targetType}");
 
                                     OnButtonClicked?.Invoke($"{targetType}: {targetName} убит");
                                     return true;
+                                }
+                                else
+                                {
+                                    _logger.Error($"Найдена bestAttack, но кнопка back_1 не обнаружена — невозможно выйти");
+                                    // Здесь можно добавить fallback, например, поиск cross или принудительный выход
                                 }
                             }
                         }
@@ -773,7 +804,7 @@ namespace DC_Button_Finder
                 // 4. Ищем cross
                 using (var crossScreenshot = _screenshotService.GetCrossAreaScreenshot())
                 {
-                    await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед поиском cross
+                    await RandomDelayAsync(311, 437);
 
                     var crossTemplate = _templateCache.GetCachedButtonImage("cross", false);
                     if (crossTemplate != null)
@@ -781,14 +812,14 @@ namespace DC_Button_Finder
                         var crossMatch = _templateMatcher.FindTemplate(crossScreenshot, crossTemplate, "cross", settings.ThresholdPercentage / 100.0);
                         if (crossMatch.Found)
                         {
-                            await RandomDelayAsync(311, 437); // ЗАДЕРЖКА перед кликом
+                            await RandomDelayAsync(311, 437);
 
                             var crossPoint = crossMatch.GetRandomPointInTemplate(_random);
                             crossPoint = _screenshotService.ConvertFromCrossAreaCoords(crossPoint);
                             _clicker.ClickAtPosition(crossPoint);
 
                             _logger.Success("Закрыто окно результатов");
-                            await RandomDelayAsync(311, 437); // ЗАДЕРЖКА после клика
+                            await RandomDelayAsync(311, 437);
                             actionPerformed = true;
                         }
                     }
@@ -809,7 +840,7 @@ namespace DC_Button_Finder
                     noActionCounter = 0;
                 }
 
-                await Task.Delay(_random.Next(500, 800)); // ЗАДЕРЖКА между итерациями
+                await Task.Delay(_random.Next(500, 800));
             }
 
             return false;

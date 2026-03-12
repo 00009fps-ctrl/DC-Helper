@@ -13,7 +13,7 @@ namespace DC_Button_Finder.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
-    public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
@@ -62,7 +62,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        [global::System.Configuration.DefaultSettingValueAttribute("93")]
         public decimal ThresholdPercentage {
             get {
                 return ((decimal)(this["ThresholdPercentage"]));
@@ -74,7 +74,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("218")]
         public decimal IterationDelay {
             get {
                 return ((decimal)(this["IterationDelay"]));
@@ -98,25 +98,13 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SearchHiddenBoss {
             get {
                 return ((bool)(this["SearchHiddenBoss"]));
             }
             set {
                 this["SearchHiddenBoss"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("atk_1")]
-        public string AttackMode {
-            get {
-                return ((string)(this["AttackMode"]));
-            }
-            set {
-                this["AttackMode"] = value;
             }
         }
         
@@ -278,7 +266,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool WeekBossX3 {
             get {
                 return ((bool)(this["WeekBossX3"]));
@@ -302,7 +290,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool HiddenBossX3 {
             get {
                 return ((bool)(this["HiddenBossX3"]));
@@ -314,7 +302,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool MobEasyX1 {
             get {
                 return ((bool)(this["MobEasyX1"]));
@@ -338,7 +326,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool MobNormalX1 {
             get {
                 return ((bool)(this["MobNormalX1"]));
@@ -374,7 +362,7 @@ namespace DC_Button_Finder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool MobStrongX3 {
             get {
                 return ((bool)(this["MobStrongX3"]));

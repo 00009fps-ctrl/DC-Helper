@@ -29,7 +29,6 @@ namespace DC_Button_Finder
                         Convert.ToInt32(Properties.Settings.Default.IterationDelay) : 1000;
                     settings.SelectedWeek = Properties.Settings.Default.SelectedWeek ?? "Week 1-8. Универсальная неделя";
                     settings.OnlyScratch = Properties.Settings.Default.OnlyScratch;
-                    settings.AttackMode = Properties.Settings.Default.AttackMode ?? "none";
 
                     // Недельные боссы
                     settings.WeekBossX1 = Properties.Settings.Default.WeekBossX1;
@@ -107,7 +106,6 @@ namespace DC_Button_Finder
                     Properties.Settings.Default.IterationDelay = settings.IterationDelay;
                     Properties.Settings.Default.SelectedWeek = settings.SelectedWeek;
                     Properties.Settings.Default.OnlyScratch = settings.OnlyScratch;
-                    Properties.Settings.Default.AttackMode = settings.AttackMode;
 
                     // Недельные боссы
                     Properties.Settings.Default.WeekBossX1 = settings.WeekBossX1;

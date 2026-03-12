@@ -12,19 +12,16 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ThresholdPercentage" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">80</Value>
+      <Value Profile="(Default)">93</Value>
     </Setting>
     <Setting Name="IterationDelay" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">1000</Value>
+      <Value Profile="(Default)">218</Value>
     </Setting>
     <Setting Name="SelectedWeek" Type="System.String" Scope="User">
       <Value Profile="(Default)">Week 5. Камазотц</Value>
     </Setting>
     <Setting Name="SearchHiddenBoss" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="AttackMode" Type="System.String" Scope="User">
-      <Value Profile="(Default)">atk_1</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="WindowW" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">800</Value>
@@ -66,22 +63,22 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="WeekBossX3" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="HiddenBossX1" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="HiddenBossX3" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MobEasyX1" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MobEasyX3" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MobNormalX1" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MobNormalX3" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -90,7 +87,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MobStrongX3" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
