@@ -25,6 +25,7 @@ namespace DC_Button_Finder
         public MainForm()
         {
             InitializeComponent();
+
             _random = new Random();
             _logger = new Logger(txtLog);
             _cache = new TemplateCache();
@@ -33,10 +34,8 @@ namespace DC_Button_Finder
             var templateMatcher = new TemplateMatcher(_logger);
             var clicker = new Clicker(_logger, _random);
             var scrollController = new ScrollController(clicker, _logger, _random);
-
             var botEngine = new BotEngine(_logger, _screenshotService, _cache, templateMatcher, clicker, scrollController, _random);
             _botController = new BotController(botEngine);
-
             _assistantEngine = new AssistantEngine(
                 _logger,
                 _screenshotService,
@@ -45,19 +44,15 @@ namespace DC_Button_Finder
                 clicker,
                 _random
             );
-
             _siegeScheduler = new SiegeScheduler(
                 _botController,
                 _logger,
                 GetSettingsFromUIThreadSafe,
                 UpdateUIForRunningState
             );
-
             _timerDisplay = new TimerDisplay(_siegeScheduler, _botController, lblTimer);
-
             _siegeScheduler.OnSiegeStatusChanged += (status) => _logger.Info($"[ОСАДА] {status}");
             _siegeScheduler.OnAutoAction += (action) => _logger.Success($"[АВТО] {action}");
-
             botEngine.OnButtonClicked += (buttonName) =>
                 _logger.Success($"Бот нажал: {buttonName}");
             botEngine.OnStatusChanged += (status) =>
@@ -66,6 +61,7 @@ namespace DC_Button_Finder
             txtLog.ReadOnly = true;
             RegisterHotKeys();
         }
+
 
         private BotSettings GetSettingsFromUIThreadSafe()
         {
@@ -401,20 +397,6 @@ namespace DC_Button_Finder
             chkSiegeOnlyMode.Enabled = !isRunning;
             chkExtendedSiege.Enabled = !isRunning && chkSiegeOnlyMode.Checked;
 
-            if (isRunning)
-            {
-                BackColor = isAssistantRunning ? Color.LightBlue : Color.LightGreen;
-                lblStatus.Text = isAssistantRunning ? "СТАТУС: АССИСТЕНТ" : "СТАТУС: РАБОТАЕТ";
-                lblStatus.ForeColor = isAssistantRunning ? Color.DarkBlue : Color.DarkGreen;
-                txtButtonSequence.BackColor = Color.LightGray;
-            }
-            else
-            {
-                BackColor = SystemColors.Control;
-                lblStatus.Text = "СТАТУС: ОСТАНОВЛЕН";
-                lblStatus.ForeColor = Color.DarkRed;
-                txtButtonSequence.BackColor = SystemColors.Window;
-            }
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -775,6 +757,25 @@ namespace DC_Button_Finder
         }
 
         private void lblMobsStrong_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            Panel parentPanel = (Panel)txt.Parent;
+
+            // Вычисляем высоту по количеству строк
+            int lines = txt.Lines.Length;
+            int newHeight = Math.Max(35, lines * 20 + 10);
+            txt.Height = newHeight;
+
+            // Пересчитываем высоту родительской панели
+            parentPanel.Height = txt.Bottom + 10;
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

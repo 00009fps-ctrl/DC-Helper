@@ -3,17 +3,18 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
-    <RootNamespace>DC Helper</RootNamespace>
+    <RootNamespace>DC_Button_Finder</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>_resources\icon.ico</ApplicationIcon>
+    <ApplicationIcon>_resources\Images\icon.ico</ApplicationIcon>
     <Title>DCHelper_Installer</Title>
     <Description>Твой незаменимый помощник!</Description>
     <Copyright>А.Австрийский</Copyright>
     <PackageIcon>upload_414868358c21ae7586948c9d18ce6f82.png</PackageIcon>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <AnalysisLevel>latest-recommended</AnalysisLevel>
+	<Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+	<FileVersion>1.1.0.0</FileVersion>    <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Platforms>AnyCPU;x64;ARM32</Platforms>
   </PropertyGroup>
 
@@ -42,14 +43,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="_resources\icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\Denis\Downloads\upload_414868358c21ae7586948c9d18ce6f82.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <Content Include="_resources\Images\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +55,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -93,5 +92,12 @@
 		<Content Include="_resources\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>

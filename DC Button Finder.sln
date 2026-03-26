@@ -5,8 +5,6 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DC Button Finder", "DC Button Finder\DC Button Finder.csproj", "{F06C450C-F255-4A67-B51A-84053A715006}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DC Helper", "DC Helper\DC Helper.vdproj", "{DAE61C29-9FD9-6B4B-6E19-D99A47396164}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,15 +26,6 @@ Global
 		{F06C450C-F255-4A67-B51A-84053A715006}.Release|ARM32.ActiveCfg = Release|Any CPU
 		{F06C450C-F255-4A67-B51A-84053A715006}.Release|x64.ActiveCfg = Release|x64
 		{F06C450C-F255-4A67-B51A-84053A715006}.Release|x64.Build.0 = Release|x64
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Debug|Any CPU.ActiveCfg = Debug
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Debug|ARM32.ActiveCfg = Debug
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Debug|ARM32.Build.0 = Debug
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Debug|x64.ActiveCfg = Debug
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Debug|x64.Build.0 = Debug
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Release|Any CPU.ActiveCfg = Release
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Release|ARM32.ActiveCfg = Release
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Release|x64.ActiveCfg = Release
-		{DAE61C29-9FD9-6B4B-6E19-D99A47396164}.Release|x64.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
