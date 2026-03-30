@@ -406,6 +406,9 @@ namespace DC_Button_Finder
                 _settings = _settingsManager.LoadSettings();
                 ApplySettingsToUI(_settings);
 
+                // Загружаем состояние чекбоксов и заметок
+                LoadServerInfoTabState();
+
                 _siegeScheduler.SelectedServer = _settings.SelectedServer;
                 _siegeScheduler.ExtendedSiege = _settings.ExtendedSiege;
                 _siegeScheduler.IsEnabled = _settings.SiegeOnlyMode;
@@ -422,6 +425,9 @@ namespace DC_Button_Finder
         {
             try
             {
+                // Сохраняем состояние вкладки
+                SaveServerInfoTabState();
+
                 _timerDisplay?.Dispose();
                 _siegeScheduler?.Dispose();
                 _botController.Stop();
@@ -444,7 +450,6 @@ namespace DC_Button_Finder
                 _logger.Error($"Ошибка при закрытии: {ex.Message}");
             }
         }
-
         private void cboWeekSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboWeekSelection.SelectedItem != null)
@@ -778,6 +783,109 @@ namespace DC_Button_Finder
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        // Сохранить состояние вкладки "Сервер инфо"
+        private void SaveServerInfoTabState()
+        {
+            if (_settings == null) return;
+
+            // Находим вкладку
+            TabPage serverInfoTab = tabControl1.TabPages["tabPage3"]; // или по имени, которое ты дал
+            if (serverInfoTab == null)
+            {
+                foreach (TabPage page in tabControl1.TabPages)
+                {
+                    if (page.Text == "Сервер инфо")
+                    {
+                        serverInfoTab = page;
+                        break;
+                    }
+                }
+            }
+            if (serverInfoTab == null) return;
+
+            // Находим FlowLayoutPanel или Panel с серверами
+            Panel scrollPanel = null;
+            foreach (Control ctrl in serverInfoTab.Controls)
+            {
+                if (ctrl is Panel panel)
+                {
+                    scrollPanel = panel;
+                    break;
+                }
+            }
+            if (scrollPanel == null) return;
+
+            int index = 0;
+            foreach (Control ctrl in scrollPanel.Controls)
+            {
+                if (ctrl is Panel serverPanel)
+                {
+                    foreach (Control innerCtrl in serverPanel.Controls)
+                    {
+                        if (innerCtrl is CheckBox chk && index < _settings.ServerCheckboxes.Length)
+                        {
+                            _settings.ServerCheckboxes[index] = chk.Checked;
+                        }
+                        else if (innerCtrl is TextBox txt && index < _settings.ServerNotes.Length)
+                        {
+                            _settings.ServerNotes[index] = txt.Text;
+                        }
+                    }
+                    index++;
+                }
+            }
+        }
+
+        // Загрузить состояние вкладки "Сервер инфо"
+        private void LoadServerInfoTabState()
+        {
+            if (_settings == null) return;
+
+            // Находим вкладку
+            TabPage serverInfoTab = null;
+            foreach (TabPage page in tabControl1.TabPages)
+            {
+                if (page.Text == "Сервер инфо")
+                {
+                    serverInfoTab = page;
+                    break;
+                }
+            }
+            if (serverInfoTab == null) return;
+
+            // Находим панель с серверами
+            Panel scrollPanel = null;
+            foreach (Control ctrl in serverInfoTab.Controls)
+            {
+                if (ctrl is Panel panel)
+                {
+                    scrollPanel = panel;
+                    break;
+                }
+            }
+            if (scrollPanel == null) return;
+
+            int index = 0;
+            foreach (Control ctrl in scrollPanel.Controls)
+            {
+                if (ctrl is Panel serverPanel)
+                {
+                    foreach (Control innerCtrl in serverPanel.Controls)
+                    {
+                        if (innerCtrl is CheckBox chk && index < _settings.ServerCheckboxes.Length)
+                        {
+                            chk.Checked = _settings.ServerCheckboxes[index];
+                        }
+                        else if (innerCtrl is TextBox txt && index < _settings.ServerNotes.Length)
+                        {
+                            txt.Text = _settings.ServerNotes[index];
+                        }
+                    }
+                    index++;
+                }
+            }
         }
     }
 }

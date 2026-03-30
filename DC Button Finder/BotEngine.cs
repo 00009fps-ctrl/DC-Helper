@@ -185,6 +185,39 @@ namespace DC_Button_Finder
                     {
                         if (!_isRunning) break;
 
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ back_0 и back_1 (без предварительного нажатия)
+                        if (buttonName == "back_0" || buttonName == "back_1")
+                        {
+                            _logger.Info($"Достигнут {buttonName} - проверяем, есть ли мобы");
+
+                            // Сначала ищем мобов
+                            bool mobsFound = await SearchMobsInCurrentPositionAsync(settings);
+
+                            if (mobsFound)
+                            {
+                                // Мобы найдены и атакованы — выходим, кнопку выхода не нажимаем
+                                _logger.Info("Мобы найдены и атакованы, кнопка выхода не нажимается");
+                                _lastClickedButton = buttonName;
+                                foundSomething = true;
+                                return;
+                            }
+
+                            // Мобов нет — нажимаем кнопку выхода
+                            _logger.Info($"Мобов нет, нажимаем {buttonName}");
+
+                            // Теперь ищем и нажимаем кнопку
+                            var backResult = await FindAndClickSingleButtonInAreaAsync(buttonName, buttonsScreenshot, settings, "buttons");
+                            if (backResult)
+                            {
+                                _lastClickedButton = buttonName;
+                                _logger.Success($"Нажата кнопка: {buttonName}");
+                                foundSomething = true;
+                                return;
+                            }
+                            continue;
+                        }
+
+                        // Обычная обработка для остальных кнопок
                         var result = await FindAndClickSingleButtonInAreaAsync(buttonName, buttonsScreenshot, settings, "buttons");
                         if (result)
                         {
@@ -270,12 +303,13 @@ namespace DC_Button_Finder
                 await SearchMobsInCurrentPositionAsync(settings);
             }
         }
+
         private async Task<bool> FindAndClickBossWithAttackAsync(
-    System.Collections.Generic.Dictionary<string, Mat> bossCollection,
-    Mat areaScreenshot,
-    BotSettings settings,
-    string bossType,
-    string attackMode)
+            System.Collections.Generic.Dictionary<string, Mat> bossCollection,
+            Mat areaScreenshot,
+            BotSettings settings,
+            string bossType,
+            string attackMode)
         {
             double threshold = settings.ThresholdPercentage / 100.0;
 
@@ -373,6 +407,7 @@ namespace DC_Button_Finder
 
             return false;
         }
+
         private async Task<bool> SearchMobsInCurrentPositionAsync(BotSettings settings)
         {
             _logger.Info("Поиск мобов в текущей позиции");
@@ -586,16 +621,14 @@ namespace DC_Button_Finder
 
         private async Task HumanLikeClickAsync(System.Drawing.Point point, BotSettings settings)
         {
-            // Задержка перед кликом: ±25% от IterationDelay
             int baseDelay = settings.IterationDelay;
-            int minPreClick = baseDelay * 75 / 100;  // 75%
-            int maxPreClick = baseDelay * 125 / 100; // 125%
+            int minPreClick = baseDelay * 75 / 100;
+            int maxPreClick = baseDelay * 125 / 100;
 
             await RandomDelayAsync(minPreClick, maxPreClick);
             _clicker.ClickAtPosition(point);
-
-           
         }
+
         private async Task RandomDelayAsync(int minMs, int maxMs)
         {
             int delay = _random.Next(minMs, maxMs + 1);
@@ -611,10 +644,10 @@ namespace DC_Button_Finder
         }
 
         private async Task<bool> EnterCombatLoopAsync(
-    string targetType,
-    string targetName,
-    BotSettings settings,
-    string attackMode)
+            string targetType,
+            string targetName,
+            BotSettings settings,
+            string attackMode)
         {
             _logger.Info($"Вход в бой с {targetType}: {targetName}");
 
@@ -794,7 +827,6 @@ namespace DC_Button_Finder
                                 else
                                 {
                                     _logger.Error($"Найдена bestAttack, но кнопка back_1 не обнаружена — невозможно выйти");
-                                    // Здесь можно добавить fallback, например, поиск cross или принудительный выход
                                 }
                             }
                         }

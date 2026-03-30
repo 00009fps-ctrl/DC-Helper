@@ -63,6 +63,26 @@ namespace DC_Button_Finder
                     settings.AssistantX1 = Properties.Settings.Default.AssistantX1;
                     settings.AssistantX3 = Properties.Settings.Default.AssistantX3;
 
+                    // ========== НОВОЕ: Загрузка состояния серверной вкладки ==========
+                    // Загрузка чекбоксов (хранятся как строка из 0 и 1)
+                    string checkboxesStr = Properties.Settings.Default.ServerCheckboxes ?? "";
+                    for (int i = 0; i < settings.ServerCheckboxes.Length && i < checkboxesStr.Length; i++)
+                    {
+                        settings.ServerCheckboxes[i] = checkboxesStr[i] == '1';
+                    }
+
+                    // Загрузка заметок (хранятся как одна строка с разделителем)
+                    string notesStr = Properties.Settings.Default.ServerNotes ?? "";
+                    if (!string.IsNullOrEmpty(notesStr))
+                    {
+                        var notes = notesStr.Split(new[] { "|||" }, StringSplitOptions.None);
+                        for (int i = 0; i < settings.ServerNotes.Length && i < notes.Length; i++)
+                        {
+                            settings.ServerNotes[i] = notes[i];
+                        }
+                    }
+                    // ==================================================================
+
                     // Оконные настройки
                     if (Properties.Settings.Default.WindowX != 0 && Properties.Settings.Default.WindowY != 0)
                     {
@@ -139,6 +159,20 @@ namespace DC_Button_Finder
                     // Ассистент
                     Properties.Settings.Default.AssistantX1 = settings.AssistantX1;
                     Properties.Settings.Default.AssistantX3 = settings.AssistantX3;
+
+                    // ========== НОВОЕ: Сохранение состояния серверной вкладки ==========
+                    // Сохранение чекбоксов в строку из 0 и 1
+                    string checkboxesStr = "";
+                    foreach (bool b in settings.ServerCheckboxes)
+                    {
+                        checkboxesStr += b ? "1" : "0";
+                    }
+                    Properties.Settings.Default.ServerCheckboxes = checkboxesStr;
+
+                    // Сохранение заметок (объединяем через разделитель |||)
+                    string notesStr = string.Join("|||", settings.ServerNotes);
+                    Properties.Settings.Default.ServerNotes = notesStr;
+                    // ==================================================================
 
                     // Оконные настройки
                     Properties.Settings.Default.WindowX = form.Location.X;

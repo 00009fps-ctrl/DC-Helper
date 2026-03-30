@@ -46,5 +46,11 @@ namespace DC_Button_Finder
         // Ассистент
         public bool AssistantX1 { get; set; } = false;
         public bool AssistantX3 { get; set; } = false;
+
+        // Для хранения состояния чекбоксов (18 серверов)
+        public bool[] ServerCheckboxes { get; set; } = new bool[18];
+
+        // Для хранения текста заметок (18 серверов)
+        public string[] ServerNotes { get; set; } = new string[18];
     }
 }

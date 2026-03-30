@@ -371,5 +371,29 @@ namespace DC_Button_Finder.Properties {
                 this["MobStrongX3"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerCheckboxes {
+            get {
+                return ((string)(this["ServerCheckboxes"]));
+            }
+            set {
+                this["ServerCheckboxes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerNotes {
+            get {
+                return ((string)(this["ServerNotes"]));
+            }
+            set {
+                this["ServerNotes"] = value;
+            }
+        }
     }
 }
