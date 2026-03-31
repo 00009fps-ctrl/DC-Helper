@@ -92,6 +92,7 @@ namespace DC_Button_Finder
         }
 
         public Rectangle GetButtonsArea() => _buttonsArea;
+
         public Rectangle GetCrossArea() => _crossArea;
     }
 }

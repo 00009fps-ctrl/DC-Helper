@@ -108,6 +108,7 @@ namespace DC_Button_Finder
                 MobStrongX3 = chkMobStrongX3.Checked
             };
         }
+
         private void RegisterHotKeys()
         {
             try
@@ -407,7 +408,7 @@ namespace DC_Button_Finder
                 ApplySettingsToUI(_settings);
 
                 // Загружаем состояние чекбоксов и заметок
-                LoadServerInfoTabState();
+                LoadServerInfoTab();
 
                 _siegeScheduler.SelectedServer = _settings.SelectedServer;
                 _siegeScheduler.ExtendedSiege = _settings.ExtendedSiege;
@@ -421,12 +422,13 @@ namespace DC_Button_Finder
                 _logger.Error($"Ошибка инициализации: {ex.Message}");
             }
         }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
                 // Сохраняем состояние вкладки
-                SaveServerInfoTabState();
+                SaveServerInfoTab();
 
                 _timerDisplay?.Dispose();
                 _siegeScheduler?.Dispose();
@@ -450,6 +452,7 @@ namespace DC_Button_Finder
                 _logger.Error($"Ошибка при закрытии: {ex.Message}");
             }
         }
+
         private void cboWeekSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboWeekSelection.SelectedItem != null)
@@ -481,7 +484,6 @@ namespace DC_Button_Finder
                 _logger.Info($"Выбран сервер: {selectedServer}");
             }
         }
-
 
         private void chkAlwaysMode_CheckedChanged(object sender, EventArgs e)
         {
@@ -751,9 +753,11 @@ namespace DC_Button_Finder
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
+
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
+
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         private void lblWeekBoss_Click(object sender, EventArgs e)
@@ -766,125 +770,103 @@ namespace DC_Button_Finder
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            Panel parentPanel = (Panel)txt.Parent;
-
-            // Вычисляем высоту по количеству строк
-            int lines = txt.Lines.Length;
-            int newHeight = Math.Max(35, lines * 20 + 10);
-            txt.Height = newHeight;
-
-            // Пересчитываем высоту родительской панели
-            parentPanel.Height = txt.Bottom + 10;
-        }
-
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
 
         // Сохранить состояние вкладки "Сервер инфо"
-        private void SaveServerInfoTabState()
+        private void SaveServerInfoTab()
         {
-            if (_settings == null) return;
-
-            // Находим вкладку
-            TabPage serverInfoTab = tabControl1.TabPages["tabPage3"]; // или по имени, которое ты дал
-            if (serverInfoTab == null)
+            try
             {
+                TabPage serverTab = null;
                 foreach (TabPage page in tabControl1.TabPages)
                 {
-                    if (page.Text == "Сервер инфо")
-                    {
-                        serverInfoTab = page;
-                        break;
-                    }
+                    if (page.Text == "Сервер инфо") { serverTab = page; break; }
                 }
-            }
-            if (serverInfoTab == null) return;
+                if (serverTab == null) return;
 
-            // Находим FlowLayoutPanel или Panel с серверами
-            Panel scrollPanel = null;
-            foreach (Control ctrl in serverInfoTab.Controls)
-            {
-                if (ctrl is Panel panel)
+                Panel panel = null;
+                foreach (Control ctrl in serverTab.Controls)
                 {
-                    scrollPanel = panel;
-                    break;
+                    if (ctrl is Panel p) { panel = p; break; }
                 }
-            }
-            if (scrollPanel == null) return;
+                if (panel == null) return;
 
-            int index = 0;
-            foreach (Control ctrl in scrollPanel.Controls)
-            {
-                if (ctrl is Panel serverPanel)
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                foreach (Control ctrl in panel.Controls)
                 {
-                    foreach (Control innerCtrl in serverPanel.Controls)
+                    if (ctrl is Panel row)
                     {
-                        if (innerCtrl is CheckBox chk && index < _settings.ServerCheckboxes.Length)
+                        bool? box = null;
+                        string note = "";
+                        foreach (Control inner in row.Controls)
                         {
-                            _settings.ServerCheckboxes[index] = chk.Checked;
+                            if (inner is CheckBox cb) box = cb.Checked;
+                            if (inner is TextBox tb) note = tb.Text;
                         }
-                        else if (innerCtrl is TextBox txt && index < _settings.ServerNotes.Length)
+                        if (box.HasValue)
                         {
-                            _settings.ServerNotes[index] = txt.Text;
+                            sb.AppendLine((box.Value ? "1" : "0") + "|" + note.Replace("\n", " ").Replace("\r", " "));
                         }
                     }
-                    index++;
                 }
+                System.IO.File.WriteAllText("server_data.txt", sb.ToString());
+                _logger.Info("Серверы сохранены");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка сохранения: {ex.Message}");
             }
         }
 
         // Загрузить состояние вкладки "Сервер инфо"
-        private void LoadServerInfoTabState()
+        private void LoadServerInfoTab()
         {
-            if (_settings == null) return;
-
-            // Находим вкладку
-            TabPage serverInfoTab = null;
-            foreach (TabPage page in tabControl1.TabPages)
+            try
             {
-                if (page.Text == "Сервер инфо")
+                if (!System.IO.File.Exists("server_data.txt")) return;
+
+                string[] lines = System.IO.File.ReadAllLines("server_data.txt");
+                if (lines.Length == 0) return;
+
+                TabPage serverTab = null;
+                foreach (TabPage page in tabControl1.TabPages)
                 {
-                    serverInfoTab = page;
-                    break;
+                    if (page.Text == "Сервер инфо") { serverTab = page; break; }
                 }
-            }
-            if (serverInfoTab == null) return;
+                if (serverTab == null) return;
 
-            // Находим панель с серверами
-            Panel scrollPanel = null;
-            foreach (Control ctrl in serverInfoTab.Controls)
-            {
-                if (ctrl is Panel panel)
+                Panel panel = null;
+                foreach (Control ctrl in serverTab.Controls)
                 {
-                    scrollPanel = panel;
-                    break;
+                    if (ctrl is Panel p) { panel = p; break; }
                 }
-            }
-            if (scrollPanel == null) return;
+                if (panel == null) return;
 
-            int index = 0;
-            foreach (Control ctrl in scrollPanel.Controls)
-            {
-                if (ctrl is Panel serverPanel)
+                int idx = 0;
+                foreach (Control ctrl in panel.Controls)
                 {
-                    foreach (Control innerCtrl in serverPanel.Controls)
+                    if (ctrl is Panel row && idx < lines.Length)
                     {
-                        if (innerCtrl is CheckBox chk && index < _settings.ServerCheckboxes.Length)
+                        string[] parts = lines[idx].Split('|');
+                        if (parts.Length >= 2)
                         {
-                            chk.Checked = _settings.ServerCheckboxes[index];
+                            foreach (Control inner in row.Controls)
+                            {
+                                if (inner is CheckBox cb) cb.Checked = (parts[0] == "1");
+                                if (inner is TextBox tb) tb.Text = parts[1];
+                            }
                         }
-                        else if (innerCtrl is TextBox txt && index < _settings.ServerNotes.Length)
-                        {
-                            txt.Text = _settings.ServerNotes[index];
-                        }
+                        idx++;
                     }
-                    index++;
                 }
+                _logger.Info("Серверы загружены");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка загрузки: {ex.Message}");
             }
         }
     }

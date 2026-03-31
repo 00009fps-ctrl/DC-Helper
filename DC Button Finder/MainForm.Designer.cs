@@ -500,9 +500,9 @@
             grpMode.Controls.Add(chkSiegeOnlyMode);
             grpMode.Controls.Add(chkAlwaysMode);
             grpMode.Controls.Add(chkOnlyScratch);
-            grpMode.Location = new Point(410, 238);
+            grpMode.Location = new Point(426, 238);
             grpMode.Name = "grpMode";
-            grpMode.Size = new Size(199, 225);
+            grpMode.Size = new Size(192, 225);
             grpMode.TabIndex = 7;
             grpMode.TabStop = false;
             grpMode.Text = "Режимы работы";
@@ -1257,7 +1257,6 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(550, 27);
             textBox1.TabIndex = 1;
-            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // checkBox1
             // 
@@ -1312,7 +1311,7 @@
             groupBox1.Controls.Add(chkMobEasyX1);
             groupBox1.Controls.Add(chkMobNormalX3);
             groupBox1.Controls.Add(chkMobEasyX3);
-            groupBox1.Location = new Point(205, 238);
+            groupBox1.Location = new Point(217, 238);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(178, 225);
             groupBox1.TabIndex = 20;
