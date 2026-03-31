@@ -8,11 +8,26 @@ namespace DC_Button_Finder
     public sealed class Logger
     {
         private readonly RichTextBox _logTextBox;
+        private readonly string _sessionLogFile;
         private const int MAX_LOG_ENTRIES = 1000;
 
         public Logger(RichTextBox logTextBox)
         {
             _logTextBox = logTextBox;
+
+            // Создаём папку Logs, если её нет
+            string logFolder = Path.Combine(Application.StartupPath, "Logs");
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
+
+            // Имя файла для этой сессии: Лог_ГГГГ-ММ-ДД_ЧЧ-ММ-СС.txt
+            string fileName = "Лог_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
+            _sessionLogFile = Path.Combine(logFolder, fileName);
+
+            // Записываем начало сессии
+            File.AppendAllText(_sessionLogFile, $"[{DateTime.Now:HH:mm:ss}] [INFO] === НАЧАЛО СЕССИИ ==={Environment.NewLine}");
         }
 
         public void Debug(string message) => Log(message, Color.Gray, "DEBUG");
@@ -41,6 +56,7 @@ namespace DC_Button_Finder
                 string timestamp = DateTime.Now.ToString("HH:mm:ss");
                 string logEntry = $"[{timestamp}] [{level}] {message}";
 
+                // Ограничиваем количество строк в RichTextBox
                 if (_logTextBox.Lines.Length >= MAX_LOG_ENTRIES)
                 {
                     _logTextBox.Clear();
@@ -51,8 +67,12 @@ namespace DC_Button_Finder
                 _logTextBox.AppendText(logEntry + Environment.NewLine);
                 _logTextBox.ScrollToCaret();
 
-                // Сохранение в файл
-                SaveToFile(logEntry);
+                // Сохраняем в файл этой сессии
+                try
+                {
+                    File.AppendAllText(_sessionLogFile, logEntry + Environment.NewLine);
+                }
+                catch { }
             }
             catch (Exception ex)
             {
@@ -60,17 +80,14 @@ namespace DC_Button_Finder
             }
         }
 
-        private void SaveToFile(string logEntry)
+        // Вызови этот метод при закрытии программы, чтобы записать конец сессии
+        public void CloseSession()
         {
             try
             {
-                string logFile = $"bot_log_{DateTime.Now:yyyyMMdd}.txt";
-                File.AppendAllText(logFile, logEntry + Environment.NewLine);
+                File.AppendAllText(_sessionLogFile, $"[{DateTime.Now:HH:mm:ss}] [INFO] === КОНЕЦ СЕССИИ ==={Environment.NewLine}");
             }
-            catch
-            {
-                // Игнорируем ошибки записи в файл
-            }
+            catch { }
         }
     }
 }

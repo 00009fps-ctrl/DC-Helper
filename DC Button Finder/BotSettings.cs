@@ -6,7 +6,7 @@ namespace DC_Button_Finder
     {
         // Основные настройки
         public string ButtonSequence { get; set; } = string.Empty;
-        public int ThresholdPercentage { get; set; } = 80;
+        public double ThresholdPercentage { get; set; } = 80;
         public int IterationDelay { get; set; } = 1000;
         public string SelectedWeek { get; set; } = "Week 1-8. Универсальная неделя";
         public Point WindowLocation { get; set; } = Point.Empty;

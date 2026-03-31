@@ -24,7 +24,7 @@ namespace DC_Button_Finder
                     // Основные настройки
                     settings.ButtonSequence = Properties.Settings.Default.savedText ?? string.Empty;
                     settings.ThresholdPercentage = Properties.Settings.Default.ThresholdPercentage > 0 ?
-                        Convert.ToInt32(Properties.Settings.Default.ThresholdPercentage) : 80;
+                        Convert.ToDouble(Properties.Settings.Default.ThresholdPercentage) : 80;
                     settings.IterationDelay = Properties.Settings.Default.IterationDelay > 0 ?
                         Convert.ToInt32(Properties.Settings.Default.IterationDelay) : 1000;
                     settings.SelectedWeek = Properties.Settings.Default.SelectedWeek ?? "Week 1-8. Универсальная неделя";

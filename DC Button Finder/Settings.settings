@@ -11,7 +11,7 @@
     <Setting Name="WindowY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ThresholdPercentage" Type="System.Decimal" Scope="User">
+    <Setting Name="ThresholdPercentage" Type="System.Double" Scope="User">
       <Value Profile="(Default)">93</Value>
     </Setting>
     <Setting Name="IterationDelay" Type="System.Decimal" Scope="User">

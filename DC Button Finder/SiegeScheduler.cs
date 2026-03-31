@@ -17,38 +17,33 @@ namespace DC_Button_Finder
         private bool _autoStarted = false;
         private bool _isEnabled = true;
         private readonly Random _random = new Random();
+        private bool _launchScheduled = false; // Флаг, что запуск уже запланирован для этой осады
 
-        // НОВОЕ: Расписание для серверов (групп)
+        // Расписание для серверов (групп)
         private readonly Dictionary<string, List<int>> _serverSchedules = new()
-{
-    // Группа 1:
-    { "I.Изначальный мир / V.Гьеди Прайм / XII.Пиксис", new List<int> { 3, 8, 13, 18, 23 } },
-    
-    // Группа 2:
-    { "II.Западные территории / VI.Салуса Секундус / XI.Кайтайн / XIII.Вульпекула", new List<int> { 0, 4, 9, 14, 19 } },
-    
-    // Группа 3:
-    { "III.Омикрон Прайм / VII.Лас Эквестрия / X.Ахернар / XIV.Эридан", new List<int> { 5, 10, 15, 20, 1 } },
-    
-    // Группа 4:
-    { "IV.Оазис Судьбы / VIII.Регис / IX.Ричез", new List<int> { 2, 6, 11, 16, 21 } }
-};
+        {
+            // Группа 1:
+            { "I.Изначальный мир / V.Гьеди Прайм / XII.Пиксис", new List<int> { 3, 8, 13, 18, 23 } },
+            
+            // Группа 2:
+            { "II.Западные территории / VI.Салуса Секундус / XI.Кайтайн / XIII.Вульпекула", new List<int> { 0, 4, 9, 14, 19 } },
+            
+            // Группа 3:
+            { "III.Омикрон Прайм / VII.Лас Эквестрия / X.Ахернар / XIV.Эридан", new List<int> { 5, 10, 15, 20, 1 } },
+            
+            // Группа 4:
+            { "IV.Оазис Судьбы / VIII.Регис / IX.Ричез", new List<int> { 2, 6, 11, 16, 21 } }
+        };
 
         private const int CHECK_INTERVAL_MS = 30000; // 30 секунд
 
-        // НОВОЕ: Текущий выбранный сервер
         private string _selectedServer = "IV.Оазис Судьбы / VIII.Регис / IX.Ричез";
-
-        // НОВОЕ: Флаг расширенных осад
         private bool _extendedSiege = false;
-
-        // НОВОЕ: Флаг для отслеживания запуска по расширенному времени
         private bool _startedByExtended = false;
 
         public event Action<string>? OnSiegeStatusChanged;
         public event Action<string>? OnAutoAction;
 
-        // НОВОЕ: Свойства для настроек
         public string SelectedServer
         {
             get => _selectedServer;
@@ -83,6 +78,10 @@ namespace DC_Button_Finder
                 if (!value && _autoStarted)
                 {
                     StopAutoBot();
+                }
+                if (!value)
+                {
+                    _launchScheduled = false; // Сбрасываем флаг при отключении
                 }
                 _logger.Info($"Планировщик осад: {(value ? "ВКЛ" : "ВЫКЛ")}");
             }
@@ -139,8 +138,8 @@ namespace DC_Button_Finder
                     // Если текущее время между checkStartTime и siegeStartTime
                     if (currentTime >= checkStartTime && currentTime < siegeStartTime)
                     {
-                        // И бот еще не запущен
-                        if (!_botController.IsRunning && !_autoStarted)
+                        // Если ещё не запланировали запуск для этой осады
+                        if (!_launchScheduled && !_botController.IsRunning && !_autoStarted)
                         {
                             // Вычисляем сколько секунд осталось до начала осады
                             var secondsUntilSiege = (siegeStartTime - currentTime).TotalSeconds;
@@ -149,6 +148,8 @@ namespace DC_Button_Finder
                             int delaySeconds = _random.Next(0, Math.Min(181, (int)secondsUntilSiege + 1));
 
                             _logger.Info($"Осада в {siegeHour:00}:00. Запуск через {delaySeconds} сек (за {secondsUntilSiege - delaySeconds:F0} сек до начала)");
+
+                            _launchScheduled = true; // Запоминаем, что запуск запланирован
 
                             if (delaySeconds > 0)
                             {
@@ -200,7 +201,6 @@ namespace DC_Button_Finder
             }
         }
 
-        // НОВЫЕ ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ:
         private List<int> GetSiegeHoursForServer(string server)
         {
             if (_serverSchedules.TryGetValue(server, out var hours))
@@ -209,12 +209,13 @@ namespace DC_Button_Finder
             // По умолчанию возвращаем расписание
             return _serverSchedules["IV.Оазис Судьбы / VIII.Регис / IX.Ричез"];
         }
-        
+
         private async Task StartAutoBot()
         {
             try
             {
                 _autoStarted = true;
+                _launchScheduled = false; // Сбрасываем флаг после запуска
                 OnSiegeStatusChanged?.Invoke("Обнаружено начало осады");
                 OnAutoAction?.Invoke("Автоматический запуск бота");
 
@@ -231,6 +232,7 @@ namespace DC_Button_Finder
                 _logger.Error($"Ошибка автоматического запуска: {ex.Message}");
                 _autoStarted = false;
                 _startedByExtended = false;
+                _launchScheduled = false;
                 _updateUI(false);
                 OnSiegeStatusChanged?.Invoke($"Ошибка запуска: {ex.Message}");
             }
@@ -247,6 +249,7 @@ namespace DC_Button_Finder
                 _updateUI(false);
                 _autoStarted = false;
                 _startedByExtended = false;
+                _launchScheduled = false; // Сбрасываем флаг при остановке
 
                 _logger.Success("Бот автоматически остановлен по окончанию осады");
                 OnSiegeStatusChanged?.Invoke("Бот остановлен автоматически");
@@ -315,7 +318,6 @@ namespace DC_Button_Finder
             var now = DateTime.Now;
             var currentTime = now.TimeOfDay;
 
-            // НОВОЕ: Получаем расписание для текущего сервера
             var siegeHours = GetSiegeHoursForServer(_selectedServer);
 
             // Находим ближайшую осаду сегодня
@@ -356,7 +358,6 @@ namespace DC_Button_Finder
             int currentHour = now.Hour;
             int currentMinute = now.Minute;
 
-            // Получаем расписание для текущего сервера
             var siegeHours = GetSiegeHoursForServer(_selectedServer);
 
             // Проверяем, идет ли сейчас осада

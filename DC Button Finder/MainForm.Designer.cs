@@ -218,6 +218,7 @@
             // 
             // numThreshold
             // 
+            numThreshold.DecimalPlaces = 2;
             numThreshold.Location = new Point(123, 8);
             numThreshold.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numThreshold.Name = "numThreshold";

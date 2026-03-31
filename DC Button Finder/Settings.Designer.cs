@@ -63,9 +63,9 @@ namespace DC_Button_Finder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("93")]
-        public decimal ThresholdPercentage {
+        public double ThresholdPercentage {
             get {
-                return ((decimal)(this["ThresholdPercentage"]));
+                return ((double)(this["ThresholdPercentage"]));
             }
             set {
                 this["ThresholdPercentage"] = value;

@@ -78,7 +78,7 @@ namespace DC_Button_Finder
             return new BotSettings
             {
                 ButtonSequence = txtButtonSequence.Text ?? string.Empty,
-                ThresholdPercentage = decimal.ToInt32(numThreshold.Value),
+                ThresholdPercentage = (double)numThreshold.Value,
                 IterationDelay = decimal.ToInt32(numIterationDelay.Value),
                 SelectedWeek = cboWeekSelection.SelectedItem?.ToString() ?? "Week 1-8. Универсальная неделя",
                 SelectedServer = cboServerSelection.SelectedItem?.ToString() ?? "IV.Оазис Судьбы / VIII.Регис / IX.Ричез",
@@ -180,11 +180,7 @@ namespace DC_Button_Finder
                 UpdateUIForRunningState(true);
                 _timerDisplay.BotStarted();
 
-                await _assistantEngine.StartAsync(
-                    assistantAttackMode,
-                    settings.IterationDelay,
-                    settings.ThresholdPercentage
-                );
+                await _assistantEngine.StartAsync(assistantAttackMode, settings.IterationDelay, (int)settings.ThresholdPercentage);
 
                 _logger.Success($"Ассистент запущен (режим: {assistantAttackMode})");
             }
@@ -298,7 +294,7 @@ namespace DC_Button_Finder
             cboServerSelection.Items.AddRange(servers);
 
             txtButtonSequence.Text = settings.ButtonSequence;
-            numThreshold.Value = settings.ThresholdPercentage;
+            numThreshold.Value = (decimal)settings.ThresholdPercentage;
             numIterationDelay.Value = settings.IterationDelay;
 
             if (!string.IsNullOrEmpty(settings.SelectedWeek) && cboWeekSelection.Items.Contains(settings.SelectedWeek))
