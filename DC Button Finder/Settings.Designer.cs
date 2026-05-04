@@ -147,42 +147,6 @@ namespace DC_Button_Finder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SearchMobsEasy {
-            get {
-                return ((bool)(this["SearchMobsEasy"]));
-            }
-            set {
-                this["SearchMobsEasy"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SearchMobsNormal {
-            get {
-                return ((bool)(this["SearchMobsNormal"]));
-            }
-            set {
-                this["SearchMobsNormal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SearchMobsStrong {
-            get {
-                return ((bool)(this["SearchMobsStrong"]));
-            }
-            set {
-                this["SearchMobsStrong"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AlwaysMode {
             get {
                 return ((bool)(this["AlwaysMode"]));

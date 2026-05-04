@@ -39,11 +39,6 @@ namespace DC_Button_Finder
                     settings.HiddenBossX1 = Properties.Settings.Default.HiddenBossX1;
                     settings.HiddenBossX3 = Properties.Settings.Default.HiddenBossX3;
 
-                    // Мобы
-                    settings.SearchMobsEasy = Properties.Settings.Default.SearchMobsEasy;
-                    settings.SearchMobsNormal = Properties.Settings.Default.SearchMobsNormal;
-                    settings.SearchMobsStrong = Properties.Settings.Default.SearchMobsStrong;
-
                     settings.MobEasyX1 = Properties.Settings.Default.MobEasyX1;
                     settings.MobEasyX3 = Properties.Settings.Default.MobEasyX3;
                     settings.MobNormalX1 = Properties.Settings.Default.MobNormalX1;
@@ -115,11 +110,6 @@ namespace DC_Button_Finder
                     Properties.Settings.Default.SearchHiddenBoss = settings.SearchHiddenBoss;
                     Properties.Settings.Default.HiddenBossX1 = settings.HiddenBossX1;
                     Properties.Settings.Default.HiddenBossX3 = settings.HiddenBossX3;
-
-                    // Мобы
-                    Properties.Settings.Default.SearchMobsEasy = settings.SearchMobsEasy;
-                    Properties.Settings.Default.SearchMobsNormal = settings.SearchMobsNormal;
-                    Properties.Settings.Default.SearchMobsStrong = settings.SearchMobsStrong;
 
                     Properties.Settings.Default.MobEasyX1 = settings.MobEasyX1;
                     Properties.Settings.Default.MobEasyX3 = settings.MobEasyX3;

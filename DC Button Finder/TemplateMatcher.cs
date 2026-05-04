@@ -16,11 +16,9 @@ namespace DC_Button_Finder
         {
             try
             {
-                // Приводим оба изображения к одинаковому формату
                 Mat processedScreenshot = new Mat();
                 Mat processedTemplate = new Mat();
 
-                // Конвертируем скриншот в BGR если нужно
                 if (screenshot.Channels() == 4)
                     Cv2.CvtColor(screenshot, processedScreenshot, ColorConversionCodes.BGRA2BGR);
                 else if (screenshot.Channels() == 1)
@@ -28,7 +26,6 @@ namespace DC_Button_Finder
                 else
                     screenshot.CopyTo(processedScreenshot);
 
-                // Конвертируем шаблон в BGR если нужно
                 if (template.Channels() == 4)
                     Cv2.CvtColor(template, processedTemplate, ColorConversionCodes.BGRA2BGR);
                 else if (template.Channels() == 1)
@@ -36,7 +33,6 @@ namespace DC_Button_Finder
                 else
                     template.CopyTo(processedTemplate);
 
-                // Убеждаемся что оба изображения в 8-bit формате
                 if (processedScreenshot.Depth() != MatType.CV_8U)
                     processedScreenshot.ConvertTo(processedScreenshot, MatType.CV_8U);
 
@@ -62,15 +58,10 @@ namespace DC_Button_Finder
                     };
 
                     if (matchResult.Found)
-                    {
                         _logger.Info($"Найдено: {templateName} - {confidencePercent:F1}% (порог: {threshold * 100:F1}%)");
-                    }
                     else
-                    {
                         _logger.Debug($"Не найдено: {templateName} - {confidencePercent:F1}% (порог: {threshold * 100:F1}%)");
-                    }
 
-                    // Очищаем временные матрицы
                     processedScreenshot.Dispose();
                     processedTemplate.Dispose();
 
@@ -96,18 +87,13 @@ namespace DC_Button_Finder
 
         public static MatchResult NotFound(string templateName)
         {
-            return new MatchResult
-            {
-                Found = false,
-                TemplateName = templateName
-            };
+            return new MatchResult { Found = false, TemplateName = templateName };
         }
 
         public System.Drawing.Point GetRandomPointInTemplate(Random random)
         {
             if (!Found) return System.Drawing.Point.Empty;
 
-            // Случайная точка внутри центральной области шаблона (50% от размеров)
             int minX = Location.X + TemplateSize.Width / 4;
             int maxX = Location.X + TemplateSize.Width * 3 / 4;
             int minY = Location.Y + TemplateSize.Height / 4;
@@ -123,11 +109,8 @@ namespace DC_Button_Finder
         {
             if (!Found) return System.Drawing.Point.Empty;
 
-            // От правого края шаблона отступаем влево на 0-40 пикселей
             int maxX = Location.X + TemplateSize.Width;
             int minX = maxX - 40;
-
-            // От нижнего края шаблона отступаем вверх/вниз на 5 пикселей
             int maxY = Location.Y + TemplateSize.Height;
             int minY = maxY - 5;
             int actualMaxY = maxY + 5;

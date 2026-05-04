@@ -12,7 +12,6 @@ namespace DC_Button_Finder
         public Point WindowLocation { get; set; } = Point.Empty;
         public Size WindowSize { get; set; } = Size.Empty;
         public bool OnlyScratch { get; set; } = false;
-        public string AttackMode { get; set; } = "none"; // Для обратной совместимости
 
         // Недельные боссы с режимами атаки
         public bool WeekBossX1 { get; set; } = false;
@@ -46,6 +45,5 @@ namespace DC_Button_Finder
         // Ассистент
         public bool AssistantX1 { get; set; } = false;
         public bool AssistantX3 { get; set; } = false;
-
     }
 }

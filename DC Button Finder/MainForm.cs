@@ -393,7 +393,6 @@ namespace DC_Button_Finder
             chkAlwaysMode.Enabled = !isRunning;
             chkSiegeOnlyMode.Enabled = !isRunning;
             chkExtendedSiege.Enabled = !isRunning && chkSiegeOnlyMode.Checked;
-
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -749,27 +748,10 @@ namespace DC_Button_Finder
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        private void lblWeekBoss_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblMobsStrong_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         // Сохранить состояние вкладки "Сервер инфо"
         private void SaveServerInfoTab()

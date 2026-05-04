@@ -342,7 +342,6 @@
             lblWeekBoss.TabIndex = 3;
             lblWeekBoss.Text = "Недельные\r\nбоссы";
             lblWeekBoss.TextAlign = ContentAlignment.MiddleLeft;
-            lblWeekBoss.Click += lblWeekBoss_Click;
             // 
             // chkWeekBossX1
             // 
@@ -438,7 +437,6 @@
             lblMobsStrong.TabIndex = 12;
             lblMobsStrong.Text = "Сильные\r\nмобы";
             lblMobsStrong.TextAlign = ContentAlignment.MiddleLeft;
-            lblMobsStrong.Click += lblMobsStrong_Click;
             // 
             // lblMobsEasy
             // 
@@ -725,7 +723,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(766, 740);
             panel1.TabIndex = 0;
-            panel1.Paint += panel1_Paint;
             // 
             // panel19
             // 

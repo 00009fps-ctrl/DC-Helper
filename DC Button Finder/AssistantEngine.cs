@@ -68,6 +68,9 @@ namespace DC_Button_Finder
             {
                 try
                 {
+                    // Человеческая задержка перед скриншотом (имитация реакции)
+                    await RandomDelayAsync(150, 350, cancellationToken);
+
                     bool foundAndClicked = await ProcessSingleAssistantIterationAsync(threshold);
 
                     if (!foundAndClicked)
@@ -199,10 +202,14 @@ namespace DC_Button_Finder
             return false;
         }
 
-        private async Task RandomDelayAsync(int minMs, int maxMs)
+        private async Task RandomDelayAsync(int minMs, int maxMs, CancellationToken token = default)
         {
             int delay = _random.Next(minMs, maxMs + 1);
-            await Task.Delay(delay);
+            try
+            {
+                await Task.Delay(delay, token);
+            }
+            catch (TaskCanceledException) { }
         }
     }
 }

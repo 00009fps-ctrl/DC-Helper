@@ -68,6 +68,9 @@ namespace DC_Button_Finder
             {
                 try
                 {
+                    // Человеческая задержка перед скриншотом (имитация реакции)
+                    await RandomDelayAsync(50, 150, cancellationToken);
+
                     await ProcessSingleIterationAsync(settings);
 
                     int currentDelay = settings.IterationDelay;
@@ -117,43 +120,11 @@ namespace DC_Button_Finder
             // 1. СНАЧАЛА ИЩЕМ В ОБЛАСТИ КНОПОК
             using (var buttonsScreenshot = _screenshotService.GetButtonsAreaScreenshot())
             {
-                // 1. ATK (если включено)
-                if (!string.IsNullOrEmpty(settings.AttackMode) && settings.AttackMode != "none")
-                {
-                    if (settings.OnlyScratch && HasAlreadyDamaged(buttonsScreenshot, settings))
-                    {
-                        _logger.Info("Урон уже нанесен - пропускаем ATK поиск");
-                    }
-                    else
-                    {
-                        _logger.Info($"Поиск кнопки атаки: {settings.AttackMode}");
-                        var attackResult = await FindAndClickSingleButtonInAreaAsync(settings.AttackMode, buttonsScreenshot, settings, "buttons");
-                        if (attackResult)
-                        {
-                            _lastClickedButton = settings.AttackMode;
-                            if (settings.OnlyScratch)
-                            {
-                                _logger.Info("Проверяем нанесен ли урон после атаки");
-                                await Task.Delay(1000);
-                                using (var screenshotAfterAttack = _screenshotService.GetButtonsAreaScreenshot())
-                                {
-                                    if (HasAlreadyDamaged(screenshotAfterAttack, settings))
-                                    {
-                                        _logger.Info("Урон нанесен - продолжаем работу");
-                                    }
-                                }
-                            }
-                            foundSomething = true;
-                            return;
-                        }
-                    }
-                }
-
                 // 2. НЕДЕЛЬНЫЕ БОССЫ
                 string weekAttackMode = settings.WeekBossX1 ? "atk_1" : settings.WeekBossX3 ? "atk_3" : null;
                 if (weekAttackMode != null)
                 {
-                    var weekResult = await FindAndClickBossWithAttackAsync(
+                    var weekResult = await FindAndClickTargetWithAttackAsync(
                         _templateCache.WeekButtons, buttonsScreenshot, settings, "Недельный босс", weekAttackMode);
                     if (weekResult)
                     {
@@ -167,7 +138,7 @@ namespace DC_Button_Finder
                 string hiddenAttackMode = settings.HiddenBossX1 ? "atk_1" : settings.HiddenBossX3 ? "atk_3" : null;
                 if (hiddenAttackMode != null)
                 {
-                    var hiddenBossResult = await FindAndClickBossWithAttackAsync(
+                    var hiddenBossResult = await FindAndClickTargetWithAttackAsync(
                         _templateCache.HiddenBoss, buttonsScreenshot, settings, "Скрытый босс", hiddenAttackMode);
                     if (hiddenBossResult)
                     {
@@ -184,6 +155,76 @@ namespace DC_Button_Finder
                     foreach (var buttonName in buttonSequence)
                     {
                         if (!_isRunning) break;
+
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_4 (переместить курсор выше + скролл вверх)
+                        if (buttonName == "find_4")
+                        {
+                            var find4Template = _templateCache.GetCachedButtonImage("find_4", settings.SearchHiddenBoss);
+                            if (find4Template != null)
+                            {
+                                var find4Match = _templateMatcher.FindTemplate(buttonsScreenshot, find4Template, "find_4", settings.ThresholdPercentage / 100.0);
+                                if (find4Match.Found)
+                                {
+                                    _logger.Info("Найдено '4 из 4' - перемещаем курсор и прокручиваем вверх");
+
+                                    // Берём случайную точку в шаблоне
+                                    var basePoint = find4Match.GetRandomPointInTemplate(_random);
+
+                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ (чтобы скролл точно работал)
+                                    int offsetY = _random.Next(50, 101);
+                                    var movePoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
+                                    movePoint = _screenshotService.ConvertFromButtonsAreaCoords(movePoint);
+
+                                    _clicker.MoveToPosition(movePoint);
+
+                                    // Задержка, чтобы система обработала новое положение курсора
+                                    await RandomDelayAsync(200, 350);
+
+                                    await _scrollController.ScrollUpLongAsync();
+
+                                    _lastClickedButton = "find_4";
+                                    foundSomething = true;
+                                    return;
+                                }
+                            }
+                            continue;
+                        }
+
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор выше + клик + скролл вниз)
+                        if (buttonName == "find_3")
+                        {
+                            var find3Template = _templateCache.GetCachedButtonImage("find_3", settings.SearchHiddenBoss);
+                            if (find3Template != null)
+                            {
+                                var find3Match = _templateMatcher.FindTemplate(buttonsScreenshot, find3Template, "find_3", settings.ThresholdPercentage / 100.0);
+                                if (find3Match.Found)
+                                {
+                                    _logger.Info("Найдено '3 из 4' - перемещаем курсор, кликаем и прокручиваем вниз");
+
+                                    // Берём случайную точку в шаблоне
+                                    var basePoint = find3Match.GetRandomPointInTemplate(_random);
+
+                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ (чтобы скролл точно работал)
+                                    int offsetY = _random.Next(50, 101);
+                                    var movePoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
+                                    movePoint = _screenshotService.ConvertFromButtonsAreaCoords(movePoint);
+
+                                    _clicker.MoveToPosition(movePoint);
+                                    await RandomDelayAsync(200, 350);
+
+                                    // ДОБАВЛЕН КЛИК
+                                    _clicker.ClickAtPosition(movePoint);
+                                    await RandomDelayAsync(200, 350);
+
+                                    await _scrollController.ScrollDownLongAsync();
+
+                                    _lastClickedButton = "find_3";
+                                    foundSomething = true;
+                                    return;
+                                }
+                            }
+                            continue;
+                        }
 
                         // ОСОБАЯ ОБРАБОТКА ДЛЯ back_0 и back_1 (без предварительного нажатия)
                         if (buttonName == "back_0" || buttonName == "back_1")
@@ -204,17 +245,6 @@ namespace DC_Button_Finder
 
                             // Мобов нет — нажимаем кнопку выхода
                             _logger.Info($"Мобов нет, нажимаем {buttonName}");
-
-                            // Теперь ищем и нажимаем кнопку
-                            var backResult = await FindAndClickSingleButtonInAreaAsync(buttonName, buttonsScreenshot, settings, "buttons");
-                            if (backResult)
-                            {
-                                _lastClickedButton = buttonName;
-                                _logger.Success($"Нажата кнопка: {buttonName}");
-                                foundSomething = true;
-                                return;
-                            }
-                            continue;
                         }
 
                         // Обычная обработка для остальных кнопок
@@ -222,58 +252,6 @@ namespace DC_Button_Finder
                         if (result)
                         {
                             _lastClickedButton = buttonName;
-
-                            // ОСОБАЯ ЛОГИКА ДЛЯ find_4
-                            if (buttonName == "find_4")
-                            {
-                                _logger.Info("Найдено '4 из 4' - все слоты заняты");
-
-                                // ШАГ 1: Сначала ищем в текущей позиции
-                                _logger.Info("Поиск в текущей позиции");
-                                bool foundInCurrentPosition = await SearchAllTargetsInScreenshotAsync(buttonsScreenshot, settings);
-                                if (foundInCurrentPosition)
-                                {
-                                    foundSomething = true;
-                                    return;
-                                }
-
-                                // ШАГ 2: Одна длинная прокрутка ВВЕРХ
-                                _logger.Info("Прокрутка вверх для поиска в верхней позиции");
-                                await _scrollController.ScrollUpLongAsync();
-
-                                // ШАГ 3: Поиск после прокрутки
-                                _logger.Info("Поиск после прокрутки вверх");
-                                using (var screenshotAfterScroll = _screenshotService.GetButtonsAreaScreenshot())
-                                {
-                                    bool foundAfterScroll = await SearchAllTargetsInScreenshotAsync(screenshotAfterScroll, settings);
-                                    if (foundAfterScroll)
-                                    {
-                                        foundSomething = true;
-                                        return;
-                                    }
-                                }
-
-                                // ШАГ 4: Ничего не найдено - завершаем итерацию
-                                _logger.Info("Боссы/мобы не найдены - завершаем итерацию");
-                                foundSomething = true;
-                                return;
-                            }
-
-                            // ОСОБАЯ ЛОГИКА ДЛЯ find_3
-                            if (buttonName == "find_3")
-                            {
-                                _logger.Info("Найдено '3 из 4' - есть свободная ячейка, прокручиваем вниз");
-
-                                // Прокрутка вниз (одна длинная)
-                                await _scrollController.ScrollDownLongAsync();
-
-                                // Начинаем итерацию заново (ничего не ищем сразу)
-                                // Следующая итерация найдет find_1 и продолжит поиск
-                                foundSomething = true;
-                                return;
-                            }
-
-                            // Для всех остальных кнопок
                             _logger.Success($"Нажата кнопка: {buttonName}");
                             foundSomething = true;
                             return;
@@ -304,27 +282,27 @@ namespace DC_Button_Finder
             }
         }
 
-        private async Task<bool> FindAndClickBossWithAttackAsync(
-            System.Collections.Generic.Dictionary<string, Mat> bossCollection,
+        private async Task<bool> FindAndClickTargetWithAttackAsync(
+            System.Collections.Generic.Dictionary<string, Mat> targetCollection,
             Mat areaScreenshot,
             BotSettings settings,
-            string bossType,
+            string targetType,
             string attackMode)
         {
             double threshold = settings.ThresholdPercentage / 100.0;
 
-            foreach (var kvp in bossCollection)
+            foreach (var kvp in targetCollection)
             {
                 if (!_isRunning) break;
 
                 var matchResult = _templateMatcher.FindTemplate(areaScreenshot, kvp.Value, kvp.Key, threshold);
                 if (matchResult.Found)
                 {
-                    _logger.Info($"Найден {bossType}: {kvp.Key}");
+                    _logger.Info($"Найден {targetType}: {kvp.Key}");
 
                     await RandomDelayAsync(311, 437);
 
-                    // Клик по боссу (от левого нижнего угла)
+                    // Клик по цели (от левого нижнего угла)
                     int bottomLeftX = matchResult.Location.X;
                     int bottomLeftY = matchResult.Location.Y + matchResult.TemplateSize.Height;
 
@@ -346,61 +324,9 @@ namespace DC_Button_Finder
                     await RandomDelayAsync(311, 437);
 
                     // Входим в цикл боя
-                    bool combatResult = await EnterCombatLoopAsync(bossType, kvp.Key, settings, attackMode);
+                    bool combatResult = await EnterCombatLoopAsync(targetType, kvp.Key, settings, attackMode);
 
-                    _lastClickedButton = combatResult ? "boss_killed" : "boss_failed";
-                    return combatResult;
-                }
-            }
-
-            return false;
-        }
-
-        private async Task<bool> FindAndClickMobWithAttackAsync(
-            System.Collections.Generic.Dictionary<string, Mat> mobCollection,
-            Mat areaScreenshot,
-            BotSettings settings,
-            string mobType,
-            string attackMode)
-        {
-            double threshold = settings.ThresholdPercentage / 100.0;
-
-            foreach (var kvp in mobCollection)
-            {
-                if (!_isRunning) break;
-
-                var matchResult = _templateMatcher.FindTemplate(areaScreenshot, kvp.Value, kvp.Key, threshold);
-                if (matchResult.Found)
-                {
-                    _logger.Info($"Найден {mobType}: {kvp.Key}");
-
-                    await RandomDelayAsync(311, 437);
-
-                    // Клик по мобу (от левого нижнего угла)
-                    int bottomLeftX = matchResult.Location.X;
-                    int bottomLeftY = matchResult.Location.Y + matchResult.TemplateSize.Height;
-
-                    int targetX = bottomLeftX + 150;
-                    int targetY = bottomLeftY + 70;
-
-                    int minX = targetX - 30;
-                    int maxX = targetX + 30;
-                    int minY = targetY - 10;
-                    int maxY = targetY + 10;
-
-                    int x = _random.Next(minX, maxX + 1);
-                    int y = _random.Next(minY, maxY + 1);
-
-                    var clickPoint = new System.Drawing.Point(x, y);
-                    clickPoint = _screenshotService.ConvertFromButtonsAreaCoords(clickPoint);
-                    _clicker.ClickAtPosition(clickPoint);
-
-                    await RandomDelayAsync(311, 437);
-
-                    // Входим в цикл боя
-                    bool combatResult = await EnterCombatLoopAsync(mobType, kvp.Key, settings, attackMode);
-
-                    _lastClickedButton = combatResult ? "mob_killed" : "mob_failed";
+                    _lastClickedButton = combatResult ? "target_killed" : "target_failed";
                     return combatResult;
                 }
             }
@@ -420,7 +346,7 @@ namespace DC_Button_Finder
                     string attackMode = settings.MobEasyX1 ? "atk_1" : settings.MobEasyX3 ? "atk_3" : null;
                     if (attackMode != null)
                     {
-                        var mobsEasyResult = await FindAndClickMobWithAttackAsync(
+                        var mobsEasyResult = await FindAndClickTargetWithAttackAsync(
                             _templateCache.MobsEasy, buttonsScreenshot, settings, "Слабый моб", attackMode);
                         if (mobsEasyResult)
                         {
@@ -436,7 +362,7 @@ namespace DC_Button_Finder
                     string attackMode = settings.MobNormalX1 ? "atk_1" : settings.MobNormalX3 ? "atk_3" : null;
                     if (attackMode != null)
                     {
-                        var mobsNormalResult = await FindAndClickMobWithAttackAsync(
+                        var mobsNormalResult = await FindAndClickTargetWithAttackAsync(
                             _templateCache.MobsNormal, buttonsScreenshot, settings, "Средний моб", attackMode);
                         if (mobsNormalResult)
                         {
@@ -452,7 +378,7 @@ namespace DC_Button_Finder
                     string attackMode = settings.MobStrongX1 ? "atk_1" : settings.MobStrongX3 ? "atk_3" : null;
                     if (attackMode != null)
                     {
-                        var mobsStrongResult = await FindAndClickMobWithAttackAsync(
+                        var mobsStrongResult = await FindAndClickTargetWithAttackAsync(
                             _templateCache.MobsStrong, buttonsScreenshot, settings, "Сильный моб", attackMode);
                         if (mobsStrongResult)
                         {
@@ -464,65 +390,6 @@ namespace DC_Button_Finder
             }
 
             _logger.Info("Мобы не найдены");
-            return false;
-        }
-
-        private async Task<bool> SearchAllTargetsInScreenshotAsync(Mat screenshot, BotSettings settings)
-        {
-            // 1. Недельные боссы
-            string weekAttackMode = settings.WeekBossX1 ? "atk_1" : settings.WeekBossX3 ? "atk_3" : null;
-            if (weekAttackMode != null)
-            {
-                var weekResult = await FindAndClickBossWithAttackAsync(
-                    _templateCache.WeekButtons, screenshot, settings, "Недельный босс", weekAttackMode);
-                if (weekResult) return true;
-            }
-
-            // 2. Скрытые боссы
-            string hiddenAttackMode = settings.HiddenBossX1 ? "atk_1" : settings.HiddenBossX3 ? "atk_3" : null;
-            if (hiddenAttackMode != null)
-            {
-                var hiddenBossResult = await FindAndClickBossWithAttackAsync(
-                    _templateCache.HiddenBoss, screenshot, settings, "Скрытый босс", hiddenAttackMode);
-                if (hiddenBossResult) return true;
-            }
-
-            // 3. Слабые мобы
-            if (_templateCache.MobsEasy.Count > 0)
-            {
-                string attackMode = settings.MobEasyX1 ? "atk_1" : settings.MobEasyX3 ? "atk_3" : null;
-                if (attackMode != null)
-                {
-                    var mobsEasyResult = await FindAndClickMobWithAttackAsync(
-                        _templateCache.MobsEasy, screenshot, settings, "Слабый моб", attackMode);
-                    if (mobsEasyResult) return true;
-                }
-            }
-
-            // 4. Средние мобы
-            if (_templateCache.MobsNormal.Count > 0)
-            {
-                string attackMode = settings.MobNormalX1 ? "atk_1" : settings.MobNormalX3 ? "atk_3" : null;
-                if (attackMode != null)
-                {
-                    var mobsNormalResult = await FindAndClickMobWithAttackAsync(
-                        _templateCache.MobsNormal, screenshot, settings, "Средний моб", attackMode);
-                    if (mobsNormalResult) return true;
-                }
-            }
-
-            // 5. Сильные мобы
-            if (_templateCache.MobsStrong.Count > 0)
-            {
-                string attackMode = settings.MobStrongX1 ? "atk_1" : settings.MobStrongX3 ? "atk_3" : null;
-                if (attackMode != null)
-                {
-                    var mobsStrongResult = await FindAndClickMobWithAttackAsync(
-                        _templateCache.MobsStrong, screenshot, settings, "Сильный моб", attackMode);
-                    if (mobsStrongResult) return true;
-                }
-            }
-
             return false;
         }
 
@@ -543,31 +410,6 @@ namespace DC_Button_Finder
 
                 if (matchResult.Found)
                 {
-                    if (buttonName == "find_4")
-                    {
-                        _logger.Info($"Обнаружено: {buttonName} - только логирование, клик не выполняется");
-                        return true;
-                    }
-
-                    if (buttonName == "find_3")
-                    {
-                        var movePoint = matchResult.GetRandomPointInTemplate(_random);
-
-                        if (areaType == "buttons")
-                            movePoint = _screenshotService.ConvertFromButtonsAreaCoords(movePoint);
-                        else if (areaType == "cross")
-                            movePoint = _screenshotService.ConvertFromCrossAreaCoords(movePoint);
-
-                        _clicker.MoveToPosition(movePoint);
-
-                        await RandomDelayAsync(100, 300);
-                        await _scrollController.ScrollDownAsync();
-                        await RandomDelayAsync(100, 200);
-
-                        _logger.Success($"{buttonName} обработан: курсор перемещен, прокрутка выполнена");
-                        return true;
-                    }
-
                     var clickPoint = matchResult.GetRandomPointInTemplate(_random);
 
                     if (areaType == "buttons")
@@ -629,10 +471,14 @@ namespace DC_Button_Finder
             _clicker.ClickAtPosition(point);
         }
 
-        private async Task RandomDelayAsync(int minMs, int maxMs)
+        private async Task RandomDelayAsync(int minMs, int maxMs, CancellationToken token = default)
         {
             int delay = _random.Next(minMs, maxMs + 1);
-            await Task.Delay(delay);
+            try
+            {
+                await Task.Delay(delay, token);
+            }
+            catch (TaskCanceledException) { }
         }
 
         private string[] ParseButtonSequence(string sequence)
@@ -780,7 +626,7 @@ namespace DC_Button_Finder
 
                             await RandomDelayAsync(311, 437);
 
-                            // 🔹 ШАГ 1: Обязательно ищем OK (даже если не найден — продолжаем)
+                            // ШАГ 1: Обязательно ищем OK (даже если не найден — продолжаем)
                             bool okPressed = false;
                             var okTemplate = _templateCache.GetCachedButtonImage("ok", false);
                             if (okTemplate != null)
@@ -801,7 +647,7 @@ namespace DC_Button_Finder
                                 }
                             }
 
-                            // 🔹 ШАГ 2: Всегда ищем back_1 для выхода
+                            // ШАГ 2: Всегда ищем back_1 для выхода
                             var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                             if (backTemplate != null)
                             {
