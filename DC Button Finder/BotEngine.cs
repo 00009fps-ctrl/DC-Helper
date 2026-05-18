@@ -191,6 +191,7 @@ namespace DC_Button_Finder
                         }
 
                         // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор выше + клик + скролл вниз)
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор выше + клик + скролл вниз)
                         if (buttonName == "find_3")
                         {
                             var find3Template = _templateCache.GetCachedButtonImage("find_3", settings.SearchHiddenBoss);
@@ -204,16 +205,15 @@ namespace DC_Button_Finder
                                     // Берём случайную точку в шаблоне
                                     var basePoint = find3Match.GetRandomPointInTemplate(_random);
 
-                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ (чтобы скролл точно работал)
+                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ
                                     int offsetY = _random.Next(50, 101);
-                                    var movePoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
-                                    movePoint = _screenshotService.ConvertFromButtonsAreaCoords(movePoint);
+                                    var targetPoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
+                                    targetPoint = _screenshotService.ConvertFromButtonsAreaCoords(targetPoint);
 
-                                    _clicker.MoveToPosition(movePoint);
-                                    await RandomDelayAsync(200, 350);
-
-                                    // ДОБАВЛЕН КЛИК
-                                    _clicker.ClickAtPosition(movePoint);
+                                    // Перемещаем и кликаем (одно движение)
+                                    //_clicker.MoveToPosition(targetPoint);
+                                    //await RandomDelayAsync(150, 250);
+                                    _clicker.ClickAtPosition(targetPoint);
                                     await RandomDelayAsync(200, 350);
 
                                     await _scrollController.ScrollDownLongAsync();

@@ -164,33 +164,45 @@ namespace DC_Button_Finder
 
                 if (matchResult.Found)
                 {
-                    _logger.Info("Найдена лучшая атака (моб убит) - ищем кнопку назад");
+                    _logger.Info("Найдена лучшая атака (моб убит)");
 
+                    await RandomDelayAsync(383, 561);
+
+                    // 🔹 ШАГ 1: Ищем и нажимаем OK
+                    var okTemplate = _templateCache.GetCachedButtonImage("ok", false);
+                    if (okTemplate != null)
+                    {
+                        var okMatch = _templateMatcher.FindTemplate(screenshot, okTemplate, "ok", threshold);
+                        if (okMatch.Found)
+                        {
+                            await RandomDelayAsync(383, 561);
+
+                            var okPoint = okMatch.GetRandomPointInTemplate(_random);
+                            okPoint = _screenshotService.ConvertFromButtonsAreaCoords(okPoint);
+                            _clicker.ClickAtPosition(okPoint);
+
+                            _logger.Success("Нажата OK после победы");
+                            await RandomDelayAsync(383, 561);
+                        }
+                    }
+
+                    // 🔹 ШАГ 2: Ищем и нажимаем back_1
                     var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                     if (backTemplate != null)
                     {
                         var backMatch = _templateMatcher.FindTemplate(screenshot, backTemplate, "back_1", threshold);
                         if (backMatch.Found)
                         {
-                            await RandomDelayAsync(311, 437);
+                            await RandomDelayAsync(383, 561);
 
-                            var clickPoint = backMatch.GetRandomPointInTemplate(_random);
-                            clickPoint = _screenshotService.ConvertFromButtonsAreaCoords(clickPoint);
+                            var backPoint = backMatch.GetRandomPointInTemplate(_random);
+                            backPoint = _screenshotService.ConvertFromButtonsAreaCoords(backPoint);
+                            _clicker.ClickAtPosition(backPoint);
 
-                            _clicker.ClickAtPosition(clickPoint);
-
-                            await RandomDelayAsync(311, 437);
+                            await RandomDelayAsync(383, 561);
                             _logger.Success("Нажата back_1 после bestAttack");
                             return true;
                         }
-                        else
-                        {
-                            _logger.Warn("Найден bestAttack, но не найдена back_1");
-                        }
-                    }
-                    else
-                    {
-                        _logger.Warn("Шаблон back_1 не загружен");
                     }
                 }
             }
@@ -201,7 +213,6 @@ namespace DC_Button_Finder
 
             return false;
         }
-
         private async Task RandomDelayAsync(int minMs, int maxMs, CancellationToken token = default)
         {
             int delay = _random.Next(minMs, maxMs + 1);
