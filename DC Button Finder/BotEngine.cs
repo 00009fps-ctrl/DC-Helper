@@ -112,6 +112,7 @@ namespace DC_Button_Finder
             _logger.Debug("Основной цикл бота завершен");
         }
 
+
         private async Task ProcessSingleIterationAsync(BotSettings settings)
         {
             bool foundSomething = false;
@@ -156,7 +157,7 @@ namespace DC_Button_Finder
                     {
                         if (!_isRunning) break;
 
-                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_4 (переместить курсор выше + скролл вверх)
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_4 (4 ячейки заняты)
                         if (buttonName == "find_4")
                         {
                             var find4Template = _templateCache.GetCachedButtonImage("find_4", settings.SearchHiddenBoss);
@@ -165,24 +166,46 @@ namespace DC_Button_Finder
                                 var find4Match = _templateMatcher.FindTemplate(buttonsScreenshot, find4Template, "find_4", settings.ThresholdPercentage / 100.0);
                                 if (find4Match.Found)
                                 {
-                                    _logger.Info("Найдено '4 из 4' - перемещаем курсор и прокручиваем вверх");
+                                    _logger.Info("Найдено '4 из 4' - все ячейки заняты");
 
-                                    // Берём случайную точку в шаблоне
-                                    var basePoint = find4Match.GetRandomPointInTemplate(_random);
+                                    // ШАГ 1: Сначала ищем личных мобов в текущей позиции
+                                    _logger.Info("Поиск личных мобов в текущей позиции");
+                                    bool personalMobsFound = await FindAndAttackPersonalMobsAsync(buttonsScreenshot, settings);
+                                    if (personalMobsFound)
+                                    {
+                                        _lastClickedButton = "personal_mob";
+                                        foundSomething = true;
+                                        return;
+                                    }
 
-                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ (чтобы скролл точно работал)
-                                    int offsetY = _random.Next(50, 101);
-                                    var movePoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
-                                    movePoint = _screenshotService.ConvertFromButtonsAreaCoords(movePoint);
-
-                                    _clicker.MoveToPosition(movePoint);
-
-                                    // Задержка, чтобы система обработала новое положение курсора
-                                    await RandomDelayAsync(200, 350);
-
+                                    // ШАГ 2: Одна длинная прокрутка ВВЕРХ
+                                    _logger.Info("Прокрутка вверх для поиска в верхней позиции");
                                     await _scrollController.ScrollUpLongAsync();
 
-                                    _lastClickedButton = "find_4";
+                                    // ШАГ 3: Снова ищем личных мобов после прокрутки
+                                    _logger.Info("Поиск личных мобов после прокрутки вверх");
+                                    using (var screenshotAfterScroll = _screenshotService.GetButtonsAreaScreenshot())
+                                    {
+                                        personalMobsFound = await FindAndAttackPersonalMobsAsync(screenshotAfterScroll, settings);
+                                        if (personalMobsFound)
+                                        {
+                                            _lastClickedButton = "personal_mob";
+                                            foundSomething = true;
+                                            return;
+                                        }
+                                    }
+
+                                    // ШАГ 4: Ищем всех подходящих мобов
+                                    _logger.Info("Поиск всех подходящих мобов");
+                                    bool anyMobsFound = await SearchMobsInCurrentPositionAsync(settings);
+                                    if (anyMobsFound)
+                                    {
+                                        foundSomething = true;
+                                        return;
+                                    }
+
+                                    // ШАГ 5: Ничего не найдено - завершаем итерацию
+                                    _logger.Info("Боссы/мобы не найдены - завершаем итерацию");
                                     foundSomething = true;
                                     return;
                                 }
@@ -190,8 +213,7 @@ namespace DC_Button_Finder
                             continue;
                         }
 
-                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор выше + клик + скролл вниз)
-                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор выше + клик + скролл вниз)
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ find_3 (переместить курсор + клик + скролл вниз)
                         if (buttonName == "find_3")
                         {
                             var find3Template = _templateCache.GetCachedButtonImage("find_3", settings.SearchHiddenBoss);
@@ -202,17 +224,11 @@ namespace DC_Button_Finder
                                 {
                                     _logger.Info("Найдено '3 из 4' - перемещаем курсор, кликаем и прокручиваем вниз");
 
-                                    // Берём случайную точку в шаблоне
                                     var basePoint = find3Match.GetRandomPointInTemplate(_random);
-
-                                    // Смещаем курсор на 50-100 пикселей ВЫШЕ
                                     int offsetY = _random.Next(50, 101);
                                     var targetPoint = new System.Drawing.Point(basePoint.X, basePoint.Y - offsetY);
                                     targetPoint = _screenshotService.ConvertFromButtonsAreaCoords(targetPoint);
 
-                                    // Перемещаем и кликаем (одно движение)
-                                    //_clicker.MoveToPosition(targetPoint);
-                                    //await RandomDelayAsync(150, 250);
                                     _clicker.ClickAtPosition(targetPoint);
                                     await RandomDelayAsync(200, 350);
 
@@ -226,24 +242,21 @@ namespace DC_Button_Finder
                             continue;
                         }
 
-                        // ОСОБАЯ ОБРАБОТКА ДЛЯ back_0 и back_1 (без предварительного нажатия)
+                        // ОСОБАЯ ОБРАБОТКА ДЛЯ back_0 и back_1
                         if (buttonName == "back_0" || buttonName == "back_1")
                         {
                             _logger.Info($"Достигнут {buttonName} - проверяем, есть ли мобы");
 
-                            // Сначала ищем мобов
                             bool mobsFound = await SearchMobsInCurrentPositionAsync(settings);
 
                             if (mobsFound)
                             {
-                                // Мобы найдены и атакованы — выходим, кнопку выхода не нажимаем
                                 _logger.Info("Мобы найдены и атакованы, кнопка выхода не нажимается");
                                 _lastClickedButton = buttonName;
                                 foundSomething = true;
                                 return;
                             }
 
-                            // Мобов нет — нажимаем кнопку выхода
                             _logger.Info($"Мобов нет, нажимаем {buttonName}");
                         }
 
@@ -722,6 +735,163 @@ namespace DC_Button_Finder
             }
 
             return false;
+        }
+
+        // Поиск личных мобов (personalMob) и атака мобов в области вокруг них
+        private async Task<bool> FindAndAttackPersonalMobsAsync(Mat buttonsScreenshot, BotSettings settings)
+        {
+            double threshold = settings.ThresholdPercentage / 100.0;
+            var personalMobTemplate = _templateCache.GetCachedButtonImage("personalMob", false);
+            if (personalMobTemplate == null) return false;
+
+            var personalMatches = new List<MatchResult>();
+
+            // Ищем все personalMob на экране
+            var matchResult = _templateMatcher.FindTemplate(buttonsScreenshot, personalMobTemplate, "personalMob", threshold);
+            if (matchResult.Found)
+            {
+                personalMatches.Add(matchResult);
+
+                // Продолжаем искать другие (если их несколько)
+                // Для этого нужно модифицировать TemplateMatcher или использовать цикл с маской
+                // Пока оставим один, потом можно расширить
+            }
+
+            if (personalMatches.Count == 0) return false;
+
+            _logger.Info($"Найдено {personalMatches.Count} личных мобов, проверяем области вокруг них");
+
+            foreach (var personalMatch in personalMatches)
+            {
+                // Вычисляем область поиска: от края шаблона вверх 70px и влево 140px
+                int searchX = personalMatch.Location.X - 140;
+                int searchY = personalMatch.Location.Y - 70;
+                int searchWidth = 200; // ширина области для поиска моба
+                int searchHeight = 100; // высота области для поиска моба
+
+                // Ограничиваем координаты, чтобы не выйти за пределы
+                if (searchX < 0) searchX = 0;
+                if (searchY < 0) searchY = 0;
+
+                // Вырезаем область для поиска мобов
+                using (var searchArea = new Mat(buttonsScreenshot, new OpenCvSharp.Rect(searchX, searchY, searchWidth, searchHeight)))
+                {
+                    // Ищем мобов в этой области (слабые, средние, сильные)
+                    // Сначала слабые
+                    if (settings.MobEasyX1 || settings.MobEasyX3)
+                    {
+                        string attackMode = settings.MobEasyX1 ? "atk_1" : "atk_3";
+                        var mobResult = await FindAndClickMobInAreaAsync(_templateCache.MobsEasy, searchArea, settings, "Слабый моб", attackMode, searchX, searchY);
+                        if (mobResult) return true;
+                    }
+
+                    // Средние
+                    if (settings.MobNormalX1 || settings.MobNormalX3)
+                    {
+                        string attackMode = settings.MobNormalX1 ? "atk_1" : "atk_3";
+                        var mobResult = await FindAndClickMobInAreaAsync(_templateCache.MobsNormal, searchArea, settings, "Средний моб", attackMode, searchX, searchY);
+                        if (mobResult) return true;
+                    }
+
+                    // Сильные
+                    if (settings.MobStrongX1 || settings.MobStrongX3)
+                    {
+                        string attackMode = settings.MobStrongX1 ? "atk_1" : "atk_3";
+                        var mobResult = await FindAndClickMobInAreaAsync(_templateCache.MobsStrong, searchArea, settings, "Сильный моб", attackMode, searchX, searchY);
+                        if (mobResult) return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // Поиск моба в указанной области с преобразованием координат
+        private async Task<bool> FindAndClickMobInAreaAsync(
+            System.Collections.Generic.Dictionary<string, Mat> mobCollection,
+            Mat searchArea,
+            BotSettings settings,
+            string mobType,
+            string attackMode,
+            int offsetX,
+            int offsetY)
+        {
+            double threshold = settings.ThresholdPercentage / 100.0;
+
+            foreach (var kvp in mobCollection)
+            {
+                if (!_isRunning) break;
+
+                var matchResult = _templateMatcher.FindTemplate(searchArea, kvp.Value, kvp.Key, threshold);
+                if (matchResult.Found)
+                {
+                    // Преобразуем координаты из области поиска в глобальные
+                    int globalX = matchResult.Location.X + offsetX;
+                    int globalY = matchResult.Location.Y + offsetY;
+
+                    _logger.Info($"Найден {mobType}: {kvp.Key} (личный моб)");
+
+                    await RandomDelayAsync(311, 437);
+
+                    // Клик по мобу (от левого нижнего угла)
+                    int bottomLeftX = globalX;
+                    int bottomLeftY = globalY + matchResult.TemplateSize.Height;
+
+                    int targetX = bottomLeftX + 150;
+                    int targetY = bottomLeftY + 70;
+
+                    int minX = targetX - 30;
+                    int maxX = targetX + 30;
+                    int minY = targetY - 10;
+                    int maxY = targetY + 10;
+
+                    int x = _random.Next(minX, maxX + 1);
+                    int y = _random.Next(minY, maxY + 1);
+
+                    var clickPoint = new System.Drawing.Point(x, y);
+                    clickPoint = _screenshotService.ConvertFromButtonsAreaCoords(clickPoint);
+                    _clicker.ClickAtPosition(clickPoint);
+
+                    await RandomDelayAsync(311, 437);
+
+                    // Входим в цикл боя
+                    bool combatResult = await EnterCombatLoopAsync(mobType, kvp.Key, settings, attackMode);
+
+                    _lastClickedButton = combatResult ? "personal_mob_killed" : "personal_mob_failed";
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private Mat RemoveJudgeFromScreenshot(Mat screenshot, BotSettings settings)
+        {
+            double threshold = settings.ThresholdPercentage / 100.0;
+            var judgeTemplate = _templateCache.GetCachedButtonImage("judge", false);
+
+            if (judgeTemplate == null) return screenshot.Clone();
+
+            var matchResult = _templateMatcher.FindTemplate(screenshot, judgeTemplate, "judge", threshold);
+
+            if (!matchResult.Found) return screenshot.Clone();
+
+            Mat result = screenshot.Clone();
+
+            int x = matchResult.Location.X;
+            int y = matchResult.Location.Y;
+            int width = matchResult.TemplateSize.Width + 40;
+            int height = matchResult.TemplateSize.Height + 40;
+
+            if (x + width > result.Width) width = result.Width - x;
+            if (y + height > result.Height) height = result.Height - y;
+
+            var rect = new OpenCvSharp.Rect(x, y, width, height);
+            Cv2.Rectangle(result, rect, new Scalar(0, 0, 0), -1);
+
+            _logger.Info($"Область judge закрашена");
+
+            return result;
         }
     }
 }
