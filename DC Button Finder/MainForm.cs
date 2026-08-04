@@ -18,6 +18,8 @@ namespace DC_Button_Finder
         private readonly Random _random;
         private readonly ScreenshotService _screenshotService;
         private BotSettings? _settings;
+        private List<ServerInfo> _servers = new List<ServerInfo>();
+        private Label _lblCounter;
 
         private const int HOTKEY_ID_START = 1;
         private const int HOTKEY_ID_STOP = 2;
@@ -422,7 +424,7 @@ namespace DC_Button_Finder
         {
             try
             {
-                // Сохраняем состояние вкладки
+                // Сохраняем состояние вкладки (уже использует JSON)
                 SaveServerInfoTab();
 
                 _timerDisplay?.Dispose();
@@ -748,9 +750,11 @@ namespace DC_Button_Finder
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
+
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
+
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         // Сохранить состояние вкладки "Сервер инфо"
@@ -758,6 +762,10 @@ namespace DC_Button_Finder
         {
             try
             {
+                var checkboxes = new Dictionary<int, bool>();
+                var notes = new Dictionary<int, string>();
+                var counters = new Dictionary<string, decimal>();
+
                 TabPage serverTab = null;
                 foreach (TabPage page in tabControl1.TabPages)
                 {
@@ -765,86 +773,478 @@ namespace DC_Button_Finder
                 }
                 if (serverTab == null) return;
 
-                Panel panel = null;
+                // Обходим все элементы на вкладке
                 foreach (Control ctrl in serverTab.Controls)
                 {
-                    if (ctrl is Panel p) { panel = p; break; }
-                }
-                if (panel == null) return;
-
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                foreach (Control ctrl in panel.Controls)
-                {
-                    if (ctrl is Panel row)
+                    if (ctrl is Panel mainContainer)
                     {
-                        bool? box = null;
-                        string note = "";
-                        foreach (Control inner in row.Controls)
+                        foreach (Control inner in mainContainer.Controls)
                         {
-                            if (inner is CheckBox cb) box = cb.Checked;
-                            if (inner is TextBox tb) note = tb.Text;
-                        }
-                        if (box.HasValue)
-                        {
-                            sb.AppendLine((box.Value ? "1" : "0") + "|" + note.Replace("\n", " ").Replace("\r", " "));
+                            if (inner is FlowLayoutPanel flow)
+                            {
+                                foreach (Control row in flow.Controls)
+                                {
+                                    if (row is Panel panel)
+                                    {
+                                        int? serverId = null;
+                                        bool? chkValue = null;
+                                        string note = "";
+
+                                        foreach (Control item in panel.Controls)
+                                        {
+                                            if (item is CheckBox chk)
+                                            {
+                                                serverId = (int)chk.Tag;
+                                                chkValue = chk.Checked;
+                                            }
+                                            else if (item is TextBox txt && txt.Tag is int id)
+                                            {
+                                                note = txt.Text;
+                                            }
+                                            else if (item is Panel counterPanel)
+                                            {
+                                                foreach (Control innerCounter in counterPanel.Controls)
+                                                {
+                                                    if (innerCounter is NumericUpDown num && num.Tag is string key)
+                                                    {
+                                                        counters[key] = num.Value;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (serverId.HasValue && chkValue.HasValue)
+                                        {
+                                            checkboxes[serverId.Value] = chkValue.Value;
+                                            notes[serverId.Value] = note;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                System.IO.File.WriteAllText("server_data.txt", sb.ToString());
-                _logger.Info("Серверы сохранены");
+
+                ServerManager.SaveData(_servers, checkboxes, notes, counters);
+                _logger.Info($"Серверы сохранены ({_servers.Count} записей)");
             }
             catch (Exception ex)
             {
                 _logger.Error($"Ошибка сохранения: {ex.Message}");
             }
         }
-
+        // Загрузить состояние вкладки "Сервер инфо"
         // Загрузить состояние вкладки "Сервер инфо"
         private void LoadServerInfoTab()
         {
             try
             {
-                if (!System.IO.File.Exists("server_data.txt")) return;
+                _logger.Info("=== НАЧАЛО ЗАГРУЗКИ СЕРВЕРОВ ===");
 
-                string[] lines = System.IO.File.ReadAllLines("server_data.txt");
-                if (lines.Length == 0) return;
+                _servers = ServerManager.LoadServers();
+                _logger.Info($"Загружено серверов: {_servers.Count}");
+
+                var checkboxes = ServerManager.LoadCheckboxes();
+                var notes = ServerManager.LoadNotes();
+                var counters = LoadCounters();
 
                 TabPage serverTab = null;
                 foreach (TabPage page in tabControl1.TabPages)
                 {
-                    if (page.Text == "Сервер инфо") { serverTab = page; break; }
-                }
-                if (serverTab == null) return;
-
-                Panel panel = null;
-                foreach (Control ctrl in serverTab.Controls)
-                {
-                    if (ctrl is Panel p) { panel = p; break; }
-                }
-                if (panel == null) return;
-
-                int idx = 0;
-                foreach (Control ctrl in panel.Controls)
-                {
-                    if (ctrl is Panel row && idx < lines.Length)
+                    if (page.Text == "Сервер инфо")
                     {
-                        string[] parts = lines[idx].Split('|');
-                        if (parts.Length >= 2)
-                        {
-                            foreach (Control inner in row.Controls)
-                            {
-                                if (inner is CheckBox cb) cb.Checked = (parts[0] == "1");
-                                if (inner is TextBox tb) tb.Text = parts[1];
-                            }
-                        }
-                        idx++;
+                        serverTab = page;
+                        break;
                     }
                 }
-                _logger.Info("Серверы загружены");
+
+                if (serverTab == null)
+                {
+                    _logger.Warn("Вкладка 'Сервер инфо' не найдена");
+                    return;
+                }
+
+                serverTab.Controls.Clear();
+
+                Panel mainContainer = new Panel
+                {
+                    Dock = DockStyle.Fill
+                };
+
+                // ===== ВЕРХНЯЯ ПАНЕЛЬ =====
+                Panel topPanel = new Panel
+                {
+                    Dock = DockStyle.Top,
+                    Height = 45,
+                    BackColor = Color.LightSteelBlue,
+                    Padding = new Padding(10, 5, 10, 5)
+                };
+
+                _lblCounter = new Label
+                {
+                    Text = "✅ Выполнено: 0 / 0",
+                    Location = new Point(10, 10),
+                    Width = 200,
+                    Height = 25,
+                    Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                    ForeColor = Color.DarkBlue
+                };
+
+                Button btnReset = new Button
+                {
+                    Text = "🔄 Новая неделя",
+                    Location = new Point(220, 6),
+                    Width = 150,
+                    Height = 30,
+                    BackColor = Color.LightCoral,
+                    FlatStyle = FlatStyle.Flat,
+                    Font = new Font("Segoe UI", 11, FontStyle.Bold)
+                };
+                btnReset.Click += (s, e) => ResetAllCheckboxes();
+
+                topPanel.Controls.Add(_lblCounter);
+                topPanel.Controls.Add(btnReset);
+
+                // ===== ПАНЕЛЬ С ПРОКРУТКОЙ =====
+                FlowLayoutPanel flowPanel = new FlowLayoutPanel
+                {
+                    Dock = DockStyle.Fill,
+                    AutoScroll = true,
+                    FlowDirection = FlowDirection.TopDown,
+                    WrapContents = false,
+                    Padding = new Padding(5, 5, 15, 5)
+                };
+                flowPanel.HorizontalScroll.Enabled = false;
+                flowPanel.HorizontalScroll.Visible = false;
+
+                flowPanel.Resize += (s, e) =>
+                {
+                    int newWidth = flowPanel.Width - 30;
+                    if (newWidth < 450) newWidth = 450;
+
+                    foreach (Control ctrl in flowPanel.Controls)
+                    {
+                        if (ctrl is Panel panel)
+                        {
+                            panel.Width = newWidth;
+                            foreach (Control inner in panel.Controls)
+                            {
+                                if (inner is TextBox txt)
+                                {
+                                    txt.Width = newWidth - 80;
+                                }
+                            }
+                        }
+                    }
+                };
+
+                int rowCount = 0;
+
+                foreach (var server in _servers)
+                {
+                    int panelWidth = flowPanel.Width - 30;
+                    if (panelWidth < 450) panelWidth = 450;
+
+                    Panel row = new Panel
+                    {
+                        Width = panelWidth,
+                        Height = 110,
+                        AutoSize = true,
+                        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                        BorderStyle = BorderStyle.FixedSingle,
+                        BackColor = Color.WhiteSmoke,
+                        Margin = new Padding(5, 5, 5, 5),
+                        Tag = server.Id,
+                        Padding = new Padding(5, 5, 5, 5)
+                    };
+
+                    // ===== ЧЕКБОКС =====
+                    CheckBox chk = new CheckBox
+                    {
+                        Location = new Point(5, 8),
+                        Width = 25,
+                        Height = 20,
+                        Tag = server.Id
+                    };
+                    if (checkboxes.ContainsKey(server.Id))
+                        chk.Checked = checkboxes[server.Id];
+
+                    // ===== НАЗВАНИЕ =====
+                    Label lblTitle = new Label
+                    {
+                        Text = server.Name,
+                        Location = new Point(35, 5),
+                        Width = 280,
+                        Height = 20,
+                        Font = new Font("Segoe UI", 12, FontStyle.Bold)
+                    };
+
+                    // ===== ЗАМЕТКИ =====
+                    Label lblNotes = new Label
+                    {
+                        Text = "Заметки:",
+                        Location = new Point(5, 37),
+                        Width = 55,
+                        Height = 20,
+                        Font = new Font("Segoe UI", 9, FontStyle.Regular)
+                    };
+
+                    TextBox txtNotes = new TextBox
+                    {
+                        Location = new Point(65, 32),
+                        Width = panelWidth - 80,
+                        Height = 25,
+                        Font = new Font("Tahoma", 12, FontStyle.Italic),
+                        Multiline = false,
+                        BorderStyle = BorderStyle.FixedSingle,
+                        Tag = server.Id
+                    };
+                    if (notes.ContainsKey(server.Id))
+                        txtNotes.Text = notes[server.Id];
+
+                    // ===== СЧЁТЧИКИ =====
+                    int counterY = 67;
+                    int counterX = 5;
+                    int totalCounterWidth = panelWidth - 20;
+                    int counterWidth = (totalCounterWidth - 3 * 15) / 4;
+                    if (counterWidth < 130) counterWidth = 150;
+
+                    var countersData = new[]
+                    {
+                new { Label = "Карты", Key = "Cards", Color = Color.LightYellow, LabelWidth = 65 },
+                new { Label = "Пустоты", Key = "Voids", Color = Color.Thistle, LabelWidth = 80 },
+                new { Label = "Космик", Key = "Cosmic", Color = Color.LightGreen, LabelWidth = 75 },
+                new { Label = "Зелиек", Key = "Potions", Color = Color.LightGreen, LabelWidth = 65 }
+            };
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int x = counterX + i * (counterWidth + 15);
+
+                        Panel counterPanel = new Panel
+                        {
+                            Location = new Point(x, counterY),
+                            Width = counterWidth,
+                            Height = 40,
+                            BackColor = countersData[i].Color,
+                            BorderStyle = BorderStyle.FixedSingle
+                        };
+
+                        Label lblDesc = new Label
+                        {
+                            Text = countersData[i].Label + ":",
+                            Location = new Point(6, 6),
+                            Width = countersData[i].LabelWidth,
+                            Height = 24,
+                            Font = new Font("Segoe UI", 12, FontStyle.Regular),
+                            TextAlign = ContentAlignment.MiddleLeft,
+                            ForeColor = Color.Black
+                        };
+
+                        NumericUpDown numCounter = new NumericUpDown
+                        {
+                            Location = new Point(counterWidth - 65, 6),
+                            Width = 60,
+                            Height = 22,
+                            Minimum = 0,
+                            Maximum = 999,
+                            Value = 0,
+                            Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                            TextAlign = HorizontalAlignment.Center,
+                            Tag = $"{server.Id}_{countersData[i].Key}",
+                            BackColor = Color.White,
+                            BorderStyle = BorderStyle.FixedSingle
+                        };
+
+                        string key = $"{server.Id}_{countersData[i].Key}";
+                        if (counters.ContainsKey(key))
+                            numCounter.Value = counters[key];
+
+                        counterPanel.Controls.Add(lblDesc);
+                        counterPanel.Controls.Add(numCounter);
+                        row.Controls.Add(counterPanel);
+                    }
+
+                    // ===== ПОДСВЕТКА =====
+                    chk.CheckedChanged += (s, e) =>
+                    {
+                        Panel parent = (Panel)chk.Parent;
+                        parent.BackColor = chk.Checked ? Color.LightGreen : Color.WhiteSmoke;
+                        UpdateCounterLabel();
+                        SaveServerInfoTab();
+                    };
+
+                    row.BackColor = chk.Checked ? Color.LightGreen : Color.WhiteSmoke;
+
+                    // ===== АВТОСОХРАНЕНИЕ =====
+                    foreach (Control ctrl in row.Controls)
+                    {
+                        if (ctrl is Panel counterPanel)
+                        {
+                            foreach (Control inner in counterPanel.Controls)
+                            {
+                                if (inner is NumericUpDown num)
+                                {
+                                    num.ValueChanged += (s, e) => SaveServerInfoTab();
+                                }
+                            }
+                        }
+                    }
+
+                    txtNotes.TextChanged += (s, e) => SaveServerInfoTab();
+
+                    row.Controls.Add(chk);
+                    row.Controls.Add(lblTitle);
+                    row.Controls.Add(lblNotes);
+                    row.Controls.Add(txtNotes);
+                    flowPanel.Controls.Add(row);
+                    rowCount++;
+                }
+
+                mainContainer.Controls.Add(flowPanel);
+                mainContainer.Controls.Add(topPanel);
+                serverTab.Controls.Add(mainContainer);
+
+                // ===== ВЫЗОВ ОБНОВЛЕНИЯ СЧЁТЧИКА =====
+                UpdateCounterLabel();
+
+                _logger.Info($"Создано строк: {rowCount}");
+                _logger.Info("=== ЗАГРУЗКА ЗАВЕРШЕНА ===");
             }
             catch (Exception ex)
             {
                 _logger.Error($"Ошибка загрузки: {ex.Message}");
+                _logger.Error($"Stack: {ex.StackTrace}");
+            }
+        }
+
+        private Dictionary<string, decimal> LoadCounters()
+        {
+            var result = new Dictionary<string, decimal>();
+            try
+            {
+                string path = "server_counters.txt";
+                if (!File.Exists(path)) return result;
+
+                var lines = File.ReadAllLines(path);
+                foreach (var line in lines)
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length == 2 && decimal.TryParse(parts[1], out decimal value))
+                    {
+                        result[parts[0]] = value;
+                    }
+                }
+            }
+            catch { }
+            return result;
+        }
+
+        private void ResetAllCheckboxes()
+        {
+            try
+            {
+                TabPage serverTab = null;
+                foreach (TabPage page in tabControl1.TabPages)
+                {
+                    if (page.Text == "Сервер инфо")
+                    {
+                        serverTab = page;
+                        break;
+                    }
+                }
+                if (serverTab == null) return;
+
+                foreach (Control ctrl in serverTab.Controls)
+                {
+                    if (ctrl is Panel mainContainer)
+                    {
+                        foreach (Control inner in mainContainer.Controls)
+                        {
+                            if (inner is FlowLayoutPanel flow)
+                            {
+                                foreach (Control row in flow.Controls)
+                                {
+                                    if (row is Panel panel)
+                                    {
+                                        foreach (Control item in panel.Controls)
+                                        {
+                                            if (item is CheckBox chk)
+                                            {
+                                                chk.Checked = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                UpdateCounterLabel();
+                _logger.Info("Все чекбоксы сброшены (Новая неделя)");
+                SaveServerInfoTab();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка сброса: {ex.Message}");
+            }
+        }
+
+        private void UpdateCounterLabel()
+        {
+            try
+            {
+                TabPage serverTab = null;
+                foreach (TabPage page in tabControl1.TabPages)
+                {
+                    if (page.Text == "Сервер инфо")
+                    {
+                        serverTab = page;
+                        break;
+                    }
+                }
+                if (serverTab == null) return;
+
+                int total = 0;
+                int checkedCount = 0;
+
+                // Ищем FlowLayoutPanel внутри главного контейнера
+                foreach (Control ctrl in serverTab.Controls)
+                {
+                    if (ctrl is Panel mainContainer)
+                    {
+                        foreach (Control inner in mainContainer.Controls)
+                        {
+                            if (inner is FlowLayoutPanel flow)
+                            {
+                                foreach (Control row in flow.Controls)
+                                {
+                                    if (row is Panel panel)
+                                    {
+                                        foreach (Control item in panel.Controls)
+                                        {
+                                            if (item is CheckBox chk)
+                                            {
+                                                total++;
+                                                if (chk.Checked) checkedCount++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (_lblCounter != null)
+                {
+                    _lblCounter.Text = $"✅ Выполнено: {checkedCount} / {total}";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка обновления счётчика: {ex.Message}");
             }
         }
     }

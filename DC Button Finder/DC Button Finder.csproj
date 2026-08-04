@@ -43,6 +43,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="servers.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="server_counters.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="server_data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="_resources\Images\icon.ico" />
   </ItemGroup>
 
@@ -92,6 +101,12 @@
 		<Content Include="_resources\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="servers.txt" />
+	  <None Remove="server_counters.txt" />
+	  <None Remove="server_data.txt" />
 	</ItemGroup>
 
 	<ItemGroup>

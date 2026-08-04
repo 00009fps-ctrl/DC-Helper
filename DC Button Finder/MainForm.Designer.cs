@@ -696,7 +696,7 @@
             panel1.AllowDrop = true;
             panel1.AutoScroll = true;
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel1.BackColor = SystemColors.ActiveCaption;
+            panel1.BackColor = SystemColors.ActiveBorder;
             panel1.BackgroundImageLayout = ImageLayout.Zoom;
             panel1.Controls.Add(panel19);
             panel1.Controls.Add(panel18);
@@ -1258,13 +1258,14 @@
             // 
             // checkBox1
             // 
+            checkBox1.BackColor = SystemColors.ActiveBorder;
             checkBox1.Font = new Font("Arial Narrow", 12F, FontStyle.Bold);
             checkBox1.Location = new Point(3, 4);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(177, 24);
             checkBox1.TabIndex = 0;
             checkBox1.Text = "I. Изначальный мир";
-            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.UseVisualStyleBackColor = false;
             // 
             // tabPage2
             // 
