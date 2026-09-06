@@ -117,13 +117,1399 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="txtButtonSequence.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="txtButtonSequence.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 11.25pt</value>
+  </data>
+  <data name="txtButtonSequence.Location" type="System.Drawing.Point, System.Drawing">
+    <value>118, 111</value>
+  </data>
+  <data name="txtButtonSequence.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 27</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="txtButtonSequence.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;txtButtonSequence.Name" xml:space="preserve">
+    <value>txtButtonSequence</value>
+  </data>
+  <data name="&gt;&gt;txtButtonSequence.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtButtonSequence.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;txtButtonSequence.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="numThreshold.Location" type="System.Drawing.Point, System.Drawing">
+    <value>123, 8</value>
+  </data>
+  <data name="numThreshold.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 27</value>
+  </data>
+  <data name="numThreshold.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;numThreshold.Name" xml:space="preserve">
+    <value>numThreshold</value>
+  </data>
+  <data name="&gt;&gt;numThreshold.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numThreshold.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;numThreshold.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="numIterationDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>123, 45</value>
+  </data>
+  <data name="numIterationDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 27</value>
+  </data>
+  <data name="numIterationDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;numIterationDelay.Name" xml:space="preserve">
+    <value>numIterationDelay</value>
+  </data>
+  <data name="&gt;&gt;numIterationDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numIterationDelay.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;numIterationDelay.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="cboWeekSelection.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cboWeekSelection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>118, 153</value>
+  </data>
+  <data name="cboWeekSelection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 28</value>
+  </data>
+  <data name="cboWeekSelection.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cboWeekSelection.Name" xml:space="preserve">
+    <value>cboWeekSelection</value>
+  </data>
+  <data name="&gt;&gt;cboWeekSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboWeekSelection.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;cboWeekSelection.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="cboServerSelection.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cboServerSelection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>118, 192</value>
+  </data>
+  <data name="cboServerSelection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 28</value>
+  </data>
+  <data name="cboServerSelection.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;cboServerSelection.Name" xml:space="preserve">
+    <value>cboServerSelection</value>
+  </data>
+  <data name="&gt;&gt;cboServerSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboServerSelection.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;cboServerSelection.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="grpSearch.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>39, 26</value>
+  </data>
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>2, 37</value>
+  </data>
+  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
+  </data>
+  <data name="&gt;&gt;label7.Name" xml:space="preserve">
+    <value>label7</value>
+  </data>
+  <data name="&gt;&gt;label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>39, 98</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>2, 37</value>
+  </data>
+  <data name="label6.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblHiddenBoss.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblHiddenBoss.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 14.25pt, style=Bold</value>
+  </data>
+  <data name="lblHiddenBoss.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 23</value>
+  </data>
+  <data name="lblHiddenBoss.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 44</value>
+  </data>
+  <data name="lblHiddenBoss.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblHiddenBoss.Text" xml:space="preserve">
+    <value>Скрытые
+боссы</value>
+  </data>
+  <data name="lblHiddenBoss.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblHiddenBoss.Name" xml:space="preserve">
+    <value>lblHiddenBoss</value>
+  </data>
+  <data name="&gt;&gt;lblHiddenBoss.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblHiddenBoss.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;lblHiddenBoss.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="chkHiddenBossX1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="chkHiddenBossX1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkHiddenBossX1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkHiddenBossX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 26</value>
+  </data>
+  <data name="chkHiddenBossX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkHiddenBossX1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkHiddenBossX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX1.Name" xml:space="preserve">
+    <value>chkHiddenBossX1</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX1.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkHiddenBossX3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="chkHiddenBossX3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkHiddenBossX3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkHiddenBossX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 46</value>
+  </data>
+  <data name="chkHiddenBossX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkHiddenBossX3.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="chkHiddenBossX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX3.Name" xml:space="preserve">
+    <value>chkHiddenBossX3</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX3.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;chkHiddenBossX3.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblWeekBoss.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblWeekBoss.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 14.25pt, style=Bold</value>
+  </data>
+  <data name="lblWeekBoss.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 91</value>
+  </data>
+  <data name="lblWeekBoss.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 44</value>
+  </data>
+  <data name="lblWeekBoss.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lblWeekBoss.Text" xml:space="preserve">
+    <value>Недельные
+боссы</value>
+  </data>
+  <data name="lblWeekBoss.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblWeekBoss.Name" xml:space="preserve">
+    <value>lblWeekBoss</value>
+  </data>
+  <data name="&gt;&gt;lblWeekBoss.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblWeekBoss.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;lblWeekBoss.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="chkWeekBossX1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="chkWeekBossX1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkWeekBossX1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkWeekBossX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 95</value>
+  </data>
+  <data name="chkWeekBossX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkWeekBossX1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="chkWeekBossX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX1.Name" xml:space="preserve">
+    <value>chkWeekBossX1</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX1.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX1.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="chkWeekBossX3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="chkWeekBossX3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkWeekBossX3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkWeekBossX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 115</value>
+  </data>
+  <data name="chkWeekBossX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkWeekBossX3.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="chkWeekBossX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX3.Name" xml:space="preserve">
+    <value>chkWeekBossX3</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX3.Parent" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;chkWeekBossX3.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="grpSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 238</value>
+  </data>
+  <data name="grpSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 225</value>
+  </data>
+  <data name="grpSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="grpSearch.Text" xml:space="preserve">
+    <value>Поиск боссов</value>
+  </data>
+  <data name="&gt;&gt;grpSearch.Name" xml:space="preserve">
+    <value>grpSearch</value>
+  </data>
+  <data name="&gt;&gt;grpSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpSearch.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;grpSearch.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label9.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 98</value>
+  </data>
+  <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>2, 37</value>
+  </data>
+  <data name="label9.TabIndex" type="System.Int32, mscorlib">
+    <value>26</value>
+  </data>
+  <data name="&gt;&gt;label9.Name" xml:space="preserve">
+    <value>label9</value>
+  </data>
+  <data name="&gt;&gt;label9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label9.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 27</value>
+  </data>
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>2, 37</value>
+  </data>
+  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+    <value>25</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 164</value>
+  </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>2, 37</value>
+  </data>
+  <data name="label5.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
+  </data>
+  <data name="&gt;&gt;label5.Name" xml:space="preserve">
+    <value>label5</value>
+  </data>
+  <data name="&gt;&gt;label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="chkMobEasyX3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobEasyX3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobEasyX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 47</value>
+  </data>
+  <data name="chkMobEasyX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobEasyX3.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="chkMobEasyX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX3.Name" xml:space="preserve">
+    <value>chkMobEasyX3</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX3.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX3.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="chkMobNormalX3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobNormalX3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobNormalX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 116</value>
+  </data>
+  <data name="chkMobNormalX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobNormalX3.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="chkMobNormalX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX3.Name" xml:space="preserve">
+    <value>chkMobNormalX3</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX3.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX3.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="chkMobEasyX1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobEasyX1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobEasyX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 27</value>
+  </data>
+  <data name="chkMobEasyX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobEasyX1.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="chkMobEasyX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX1.Name" xml:space="preserve">
+    <value>chkMobEasyX1</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX1.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobEasyX1.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="lblMobsStrong.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMobsStrong.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 14.25pt</value>
+  </data>
+  <data name="lblMobsStrong.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 160</value>
+  </data>
+  <data name="lblMobsStrong.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 42</value>
+  </data>
+  <data name="lblMobsStrong.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="lblMobsStrong.Text" xml:space="preserve">
+    <value>Сильные
+мобы</value>
+  </data>
+  <data name="lblMobsStrong.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblMobsStrong.Name" xml:space="preserve">
+    <value>lblMobsStrong</value>
+  </data>
+  <data name="&gt;&gt;lblMobsStrong.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMobsStrong.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;lblMobsStrong.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="lblMobsEasy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMobsEasy.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 14.25pt</value>
+  </data>
+  <data name="lblMobsEasy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 26</value>
+  </data>
+  <data name="lblMobsEasy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 42</value>
+  </data>
+  <data name="lblMobsEasy.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lblMobsEasy.Text" xml:space="preserve">
+    <value>Слабые
+мобы
+</value>
+  </data>
+  <data name="lblMobsEasy.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblMobsEasy.Name" xml:space="preserve">
+    <value>lblMobsEasy</value>
+  </data>
+  <data name="&gt;&gt;lblMobsEasy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMobsEasy.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;lblMobsEasy.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkMobNormalX1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobNormalX1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobNormalX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 96</value>
+  </data>
+  <data name="chkMobNormalX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobNormalX1.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="chkMobNormalX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX1.Name" xml:space="preserve">
+    <value>chkMobNormalX1</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX1.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobNormalX1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="chkMobStrongX3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobStrongX3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobStrongX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 182</value>
+  </data>
+  <data name="chkMobStrongX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobStrongX3.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="chkMobStrongX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX3.Name" xml:space="preserve">
+    <value>chkMobStrongX3</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX3.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX3.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblMobsNormal.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMobsNormal.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 14.25pt</value>
+  </data>
+  <data name="lblMobsNormal.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 95</value>
+  </data>
+  <data name="lblMobsNormal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 42</value>
+  </data>
+  <data name="lblMobsNormal.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblMobsNormal.Text" xml:space="preserve">
+    <value>Средние
+мобы</value>
+  </data>
+  <data name="lblMobsNormal.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblMobsNormal.Name" xml:space="preserve">
+    <value>lblMobsNormal</value>
+  </data>
+  <data name="&gt;&gt;lblMobsNormal.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMobsNormal.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;lblMobsNormal.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="chkMobStrongX1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="chkMobStrongX1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 9pt</value>
+  </data>
+  <data name="chkMobStrongX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 162</value>
+  </data>
+  <data name="chkMobStrongX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 20</value>
+  </data>
+  <data name="chkMobStrongX1.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="chkMobStrongX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX1.Name" xml:space="preserve">
+    <value>chkMobStrongX1</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX1.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;chkMobStrongX1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkExtendedSiege.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkExtendedSiege.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 60</value>
+  </data>
+  <data name="chkExtendedSiege.Size" type="System.Drawing.Size, System.Drawing">
+    <value>173, 24</value>
+  </data>
+  <data name="chkExtendedSiege.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="chkExtendedSiege.Text" xml:space="preserve">
+    <value>Расширенные осады</value>
+  </data>
+  <data name="&gt;&gt;chkExtendedSiege.Name" xml:space="preserve">
+    <value>chkExtendedSiege</value>
+  </data>
+  <data name="&gt;&gt;chkExtendedSiege.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkExtendedSiege.Parent" xml:space="preserve">
+    <value>grpMode</value>
+  </data>
+  <data name="&gt;&gt;chkExtendedSiege.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkSiegeOnlyMode.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkSiegeOnlyMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 40</value>
+  </data>
+  <data name="chkSiegeOnlyMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>124, 24</value>
+  </data>
+  <data name="chkSiegeOnlyMode.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkSiegeOnlyMode.Text" xml:space="preserve">
+    <value>Только осады</value>
+  </data>
+  <data name="&gt;&gt;chkSiegeOnlyMode.Name" xml:space="preserve">
+    <value>chkSiegeOnlyMode</value>
+  </data>
+  <data name="&gt;&gt;chkSiegeOnlyMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkSiegeOnlyMode.Parent" xml:space="preserve">
+    <value>grpMode</value>
+  </data>
+  <data name="&gt;&gt;chkSiegeOnlyMode.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkAlwaysMode.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkAlwaysMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 20</value>
+  </data>
+  <data name="chkAlwaysMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="chkAlwaysMode.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="chkAlwaysMode.Text" xml:space="preserve">
+    <value>Всегда</value>
+  </data>
+  <data name="&gt;&gt;chkAlwaysMode.Name" xml:space="preserve">
+    <value>chkAlwaysMode</value>
+  </data>
+  <data name="&gt;&gt;chkAlwaysMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkAlwaysMode.Parent" xml:space="preserve">
+    <value>grpMode</value>
+  </data>
+  <data name="&gt;&gt;chkAlwaysMode.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="chkOnlyScratch.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkOnlyScratch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 80</value>
+  </data>
+  <data name="chkOnlyScratch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 24</value>
+  </data>
+  <data name="chkOnlyScratch.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="chkOnlyScratch.Text" xml:space="preserve">
+    <value>Только царапать</value>
+  </data>
+  <data name="&gt;&gt;chkOnlyScratch.Name" xml:space="preserve">
+    <value>chkOnlyScratch</value>
+  </data>
+  <data name="&gt;&gt;chkOnlyScratch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkOnlyScratch.Parent" xml:space="preserve">
+    <value>grpMode</value>
+  </data>
+  <data name="&gt;&gt;chkOnlyScratch.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="grpMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>426, 238</value>
+  </data>
+  <data name="grpMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 225</value>
+  </data>
+  <data name="grpMode.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="grpMode.Text" xml:space="preserve">
+    <value>Режимы работы</value>
+  </data>
+  <data name="&gt;&gt;grpMode.Name" xml:space="preserve">
+    <value>grpMode</value>
+  </data>
+  <data name="&gt;&gt;grpMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpMode.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;grpMode.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 21</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1, 45</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>grpAssistant</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkAssistantX3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkAssistantX3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 30</value>
+  </data>
+  <data name="chkAssistantX3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 24</value>
+  </data>
+  <data name="chkAssistantX3.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkAssistantX3.Text" xml:space="preserve">
+    <value>x3</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX3.Name" xml:space="preserve">
+    <value>chkAssistantX3</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX3.Parent" xml:space="preserve">
+    <value>grpAssistant</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX3.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkAssistantX1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkAssistantX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>19, 30</value>
+  </data>
+  <data name="chkAssistantX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 24</value>
+  </data>
+  <data name="chkAssistantX1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="chkAssistantX1.Text" xml:space="preserve">
+    <value>x1</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX1.Name" xml:space="preserve">
+    <value>chkAssistantX1</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX1.Parent" xml:space="preserve">
+    <value>grpAssistant</value>
+  </data>
+  <data name="&gt;&gt;chkAssistantX1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="grpAssistant.Location" type="System.Drawing.Point, System.Drawing">
+    <value>627, 238</value>
+  </data>
+  <data name="grpAssistant.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 76</value>
+  </data>
+  <data name="grpAssistant.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="grpAssistant.Text" xml:space="preserve">
+    <value>Ассистент (beta)</value>
+  </data>
+  <data name="&gt;&gt;grpAssistant.Name" xml:space="preserve">
+    <value>grpAssistant</value>
+  </data>
+  <data name="&gt;&gt;grpAssistant.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpAssistant.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;grpAssistant.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="btnStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>674, 0</value>
+  </data>
+  <data name="btnStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 40</value>
+  </data>
+  <data name="btnStart.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="btnStart.Text" xml:space="preserve">
+    <value>СТАРТ (F1)</value>
+  </data>
+  <data name="&gt;&gt;btnStart.Name" xml:space="preserve">
+    <value>btnStart</value>
+  </data>
+  <data name="&gt;&gt;btnStart.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnStart.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;btnStart.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="btnStop.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="btnStop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>674, 41</value>
+  </data>
+  <data name="btnStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 40</value>
+  </data>
+  <data name="btnStop.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="btnStop.Text" xml:space="preserve">
+    <value>СТОП (F2)</value>
+  </data>
+  <data name="&gt;&gt;btnStop.Name" xml:space="preserve">
+    <value>btnStop</value>
+  </data>
+  <data name="&gt;&gt;btnStop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnStop.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;btnStop.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="lblThreshold.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblThreshold.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 10</value>
+  </data>
+  <data name="lblThreshold.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 20</value>
+  </data>
+  <data name="lblThreshold.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="lblThreshold.Text" xml:space="preserve">
+    <value>Точность (%):</value>
+  </data>
+  <data name="&gt;&gt;lblThreshold.Name" xml:space="preserve">
+    <value>lblThreshold</value>
+  </data>
+  <data name="&gt;&gt;lblThreshold.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblThreshold.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblThreshold.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="lblDelay.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 47</value>
+  </data>
+  <data name="lblDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 20</value>
+  </data>
+  <data name="lblDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="lblDelay.Text" xml:space="preserve">
+    <value>Задержка (мс):</value>
+  </data>
+  <data name="&gt;&gt;lblDelay.Name" xml:space="preserve">
+    <value>lblDelay</value>
+  </data>
+  <data name="&gt;&gt;lblDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblDelay.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblDelay.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblSequence.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblSequence.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 114</value>
+  </data>
+  <data name="lblSequence.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 20</value>
+  </data>
+  <data name="lblSequence.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="lblSequence.Text" xml:space="preserve">
+    <value>Очерёдность:</value>
+  </data>
+  <data name="&gt;&gt;lblSequence.Name" xml:space="preserve">
+    <value>lblSequence</value>
+  </data>
+  <data name="&gt;&gt;lblSequence.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblSequence.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblSequence.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="lblWeek.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblWeek.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 156</value>
+  </data>
+  <data name="lblWeek.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 20</value>
+  </data>
+  <data name="lblWeek.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="lblWeek.Text" xml:space="preserve">
+    <value>Неделя:</value>
+  </data>
+  <data name="&gt;&gt;lblWeek.Name" xml:space="preserve">
+    <value>lblWeek</value>
+  </data>
+  <data name="&gt;&gt;lblWeek.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblWeek.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblWeek.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblServer.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblServer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 195</value>
+  </data>
+  <data name="lblServer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 20</value>
+  </data>
+  <data name="lblServer.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="lblServer.Text" xml:space="preserve">
+    <value>Сервер:</value>
+  </data>
+  <data name="&gt;&gt;lblServer.Name" xml:space="preserve">
+    <value>lblServer</value>
+  </data>
+  <data name="&gt;&gt;lblServer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblServer.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblServer.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblTimer.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="lblTimer.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Arial, 24pt, style=Bold</value>
+  </data>
+  <data name="lblTimer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>193, 3</value>
+  </data>
+  <data name="lblTimer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>475, 68</value>
+  </data>
+  <data name="lblTimer.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="lblTimer.Text" xml:space="preserve">
+    <value>До осады: --:--:--</value>
+  </data>
+  <data name="lblTimer.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lblTimer.Name" xml:space="preserve">
+    <value>lblTimer</value>
+  </data>
+  <data name="&gt;&gt;lblTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTimer.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;lblTimer.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tabPage1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 29</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tabPage1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>772, 746</value>
+  </data>
+  <data name="tabPage1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>Сервер инфо</value>
+  </data>
+  <data name="&gt;&gt;tabPage1.Name" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;tabPage1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage1.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabPage1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage2.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="groupBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>217, 238</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 225</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Поиск мобов</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 29</value>
+  </data>
+  <data name="tabPage2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>772, 746</value>
+  </data>
+  <data name="tabPage2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Name" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="txtLog.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="txtLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>766, 740</value>
+  </data>
+  <data name="txtLog.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="txtLog.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;txtLog.Name" xml:space="preserve">
+    <value>txtLog</value>
+  </data>
+  <data name="&gt;&gt;txtLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtLog.Parent" xml:space="preserve">
+    <value>tabPage3</value>
+  </data>
+  <data name="&gt;&gt;txtLog.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 29</value>
+  </data>
+  <data name="tabPage3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>772, 746</value>
+  </data>
+  <data name="tabPage3.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabPage3.Text" xml:space="preserve">
+    <value>Логи</value>
+  </data>
+  <data name="&gt;&gt;tabPage3.Name" xml:space="preserve">
+    <value>tabPage3</value>
+  </data>
+  <data name="&gt;&gt;tabPage3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage3.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabPage3.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tabControl1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 28</value>
+  </data>
+  <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 779</value>
+  </data>
+  <data name="tabControl1.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Name" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 24</value>
+  </data>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Справка</value>
+  </data>
+  <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 28</value>
+  </data>
+  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="menuStrip1.Text" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Name" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>64</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>780, 807</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAAAAAAAEAIACjggAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAEAAAABAAgGAAAAXHKoZgAAAAFv
@@ -685,5 +2071,23 @@
         gDJlyhQAKFOmTAGAMmXKFAAoU6ZMAYAyZcoUAChTpkwBgDJlyhQAKFOmTAGAMmXKFAAoU6ZMAYAyZcoU
         AChTpkwBgDJlyhQAKFOmTAGAMmXK/rn9/27oiC5rgQ3xAAAAAElFTkSuQmCC
 </value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>WindowsDefaultBounds</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>DC Button Finder Bot</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Name" xml:space="preserve">
+    <value>toolStripMenuItem1</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

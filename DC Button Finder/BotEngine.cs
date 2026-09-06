@@ -119,20 +119,15 @@ namespace DC_Button_Finder
             using (var rawScreenshot = _screenshotService.GetButtonsAreaScreenshot())
             using (var buttonsScreenshot = RemoveJudgeFromScreenshot(rawScreenshot, settings))
             {
-                // Боссы
                 if (await TryBossesAsync(buttonsScreenshot, settings)) return;
-
-                // Пользовательская последовательность
                 if (await TryUserSequenceAsync(buttonsScreenshot, settings)) return;
             }
 
-            // CROSS
             if (!foundSomething)
             {
                 if (await TryCrossAsync(settings)) return;
             }
 
-            // Мобы
             if (!foundSomething)
             {
                 await SearchMobsInCurrentPositionAsync(settings);
@@ -239,19 +234,15 @@ namespace DC_Button_Finder
 
             _logger.Info("Найдено '4 из 4' - все ячейки заняты");
 
-            // Личные мобы (текущая позиция)
             if (await FindAndAttackPersonalMobsAsync(buttonsScreenshot, settings)) return true;
 
-            // Скролл вверх
             await _scrollController.ScrollUpLongAsync();
 
-            // Личные мобы (после скролла)
             using (var afterScroll = _screenshotService.GetButtonsAreaScreenshot())
             {
                 if (await FindAndAttackPersonalMobsAsync(afterScroll, settings)) return true;
             }
 
-            // Обычные мобы
             if (await SearchMobsInCurrentPositionAsync(settings)) return true;
 
             _logger.Info("Боссы/мобы не найдены - завершаем итерацию");
@@ -328,6 +319,9 @@ namespace DC_Button_Finder
 
             foreach (var kvp in targetCollection)
             {
+                if (kvp.Key.Contains("judge", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 if (!_isRunning) break;
 
                 var match = _templateMatcher.FindTemplate(areaScreenshot, kvp.Value, kvp.Key, threshold);
@@ -337,7 +331,6 @@ namespace DC_Button_Finder
 
                 await RandomDelayAsync(311, 437);
 
-                // Клик по цели (от левого нижнего угла)
                 int bottomLeftX = match.Location.X;
                 int bottomLeftY = match.Location.Y + match.TemplateSize.Height;
 
@@ -372,7 +365,6 @@ namespace DC_Button_Finder
 
             using (var buttonsScreenshot = _screenshotService.GetButtonsAreaScreenshot())
             {
-                // Слабые
                 if (_templateCache.MobsEasy.Count > 0)
                 {
                     string attackMode = settings.MobEasyX1 ? "atk_1" : settings.MobEasyX3 ? "atk_3" : null;
@@ -386,7 +378,6 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // Средние
                 if (_templateCache.MobsNormal.Count > 0)
                 {
                     string attackMode = settings.MobNormalX1 ? "atk_1" : settings.MobNormalX3 ? "atk_3" : null;
@@ -400,7 +391,6 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // Сильные
                 if (_templateCache.MobsStrong.Count > 0)
                 {
                     string attackMode = settings.MobStrongX1 ? "atk_1" : settings.MobStrongX3 ? "atk_3" : null;
@@ -479,6 +469,9 @@ namespace DC_Button_Finder
 
             foreach (var kvp in mobCollection)
             {
+                if (kvp.Key.Contains("judge", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 if (!_isRunning) break;
 
                 var match = _templateMatcher.FindTemplate(searchArea, kvp.Value, kvp.Key, threshold);
@@ -530,18 +523,20 @@ namespace DC_Button_Finder
 
             Mat result = screenshot.Clone();
 
-            int x = match.Location.X;
-            int y = match.Location.Y;
-            int width = match.TemplateSize.Width + 40;
-            int height = match.TemplateSize.Height + 40;
+            int x = match.Location.X - 20;
+            int y = match.Location.Y - 20;
+            int width = match.TemplateSize.Width + 120;
+            int height = match.TemplateSize.Height + 120;
 
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
             if (x + width > result.Width) width = result.Width - x;
             if (y + height > result.Height) height = result.Height - y;
 
             var rect = new OpenCvSharp.Rect(x, y, width, height);
             Cv2.Rectangle(result, rect, new Scalar(0, 0, 0), -1);
 
-            _logger.Info($"Область judge закрашена");
+            _logger.Info($"Область judge закрашена: ({x},{y}) {width}x{height}");
             return result;
         }
 
@@ -657,7 +652,7 @@ namespace DC_Button_Finder
                 iteration++;
                 bool actionPerformed = false;
 
-                // 1. Проверка урона (только царапать)
+                // Проверка урона (только царапать)
                 if (settings.OnlyScratch)
                 {
                     using (var checkScreenshot = _screenshotService.GetButtonsAreaScreenshot())
@@ -689,7 +684,7 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 2. Атака
+                // Атака
                 bool shouldAttack = !settings.OnlyScratch || !alreadyDamaged;
                 if (shouldAttack)
                 {
@@ -716,7 +711,7 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 3. bestAttack
+                // bestAttack
                 using (var checkScreenshot = _screenshotService.GetButtonsAreaScreenshot())
                 {
                     await RandomDelayAsync(311, 437);
@@ -729,7 +724,6 @@ namespace DC_Button_Finder
                             _logger.Info($"Обнаружена bestAttack - {targetType} убит");
                             await RandomDelayAsync(311, 437);
 
-                            // OK
                             bool okPressed = false;
                             var okTemplate = _templateCache.GetCachedButtonImage("ok", false);
                             if (okTemplate != null)
@@ -748,7 +742,6 @@ namespace DC_Button_Finder
                                 }
                             }
 
-                            // back_1
                             var backTemplate = _templateCache.GetCachedButtonImage("back_1", false);
                             if (backTemplate != null)
                             {
@@ -778,7 +771,7 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 4. Cross
+                // Cross
                 using (var crossScreenshot = _screenshotService.GetCrossAreaScreenshot())
                 {
                     await RandomDelayAsync(311, 437);
@@ -799,7 +792,22 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 5. Счетчик пустых итераций
+                // Проверка на find_1 (кнопка поиска мобов)
+                using (var checkScreenshot = _screenshotService.GetButtonsAreaScreenshot())
+                {
+                    var find1Template = _templateCache.GetCachedButtonImage("find_1", false);
+                    if (find1Template != null)
+                    {
+                        var find1Match = _templateMatcher.FindTemplate(checkScreenshot, find1Template, "find_1", settings.ThresholdPercentage / 100.0);
+                        if (find1Match.Found)
+                        {
+                            _logger.Info("Обнаружена кнопка поиска мобов (find_1) - бой завершен");
+                            return true;
+                        }
+                    }
+                }
+
+                // Счетчик пустых итераций
                 if (!actionPerformed)
                 {
                     noActionCounter++;

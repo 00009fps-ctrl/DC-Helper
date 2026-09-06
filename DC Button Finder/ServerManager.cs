@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace DC_Button_Finder
 {
@@ -14,7 +16,7 @@ namespace DC_Button_Finder
     public static class ServerManager
     {
         private static readonly string _serverListPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "servers.txt");
-        private static readonly string _dataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server_data.txt");
+        private static readonly string _excelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_resources", "ServerInfo", "server_data.xlsx");
 
         public static List<ServerInfo> LoadServers()
         {
@@ -51,91 +53,64 @@ namespace DC_Button_Finder
         public static Dictionary<int, bool> LoadCheckboxes()
         {
             var result = new Dictionary<int, bool>();
+
             try
             {
-                if (!File.Exists(_dataPath)) return result;
+                if (!File.Exists(_excelPath))
+                    return result;
 
-                var lines = File.ReadAllLines(_dataPath);
-                foreach (var line in lines)
+                using (var package = new ExcelPackage(new FileInfo(_excelPath)))
                 {
-                    var parts = line.Split('|');
-                    if (parts.Length >= 3 && int.TryParse(parts[0], out int id))
+                    var sheet = package.Workbook.Worksheets["CheckBox"];
+                    if (sheet == null)
+                        return result;
+
+                    int row = 2;
+                    while (sheet.Cells[row, 1].Value != null)
                     {
-                        result[id] = parts[1] == "1";
+                        if (int.TryParse(sheet.Cells[row, 1].Text, out int id))
+                        {
+                            bool isChecked = sheet.Cells[row, 2].Text == "1";
+                            result[id] = isChecked;
+                        }
+                        row++;
                     }
                 }
             }
             catch { }
+
             return result;
         }
 
-        public static Dictionary<int, string> LoadNotes()
+        public static void SaveCheckboxes(Dictionary<int, bool> checkboxes)
         {
-            var result = new Dictionary<int, string>();
             try
             {
-                if (!File.Exists(_dataPath)) return result;
-
-                var lines = File.ReadAllLines(_dataPath);
-                foreach (var line in lines)
+                using (var package = new ExcelPackage(new FileInfo(_excelPath)))
                 {
-                    var parts = line.Split('|');
-                    if (parts.Length >= 3 && int.TryParse(parts[0], out int id))
+                    var sheet = package.Workbook.Worksheets["CheckBox"];
+                    if (sheet == null)
+                        sheet = package.Workbook.Worksheets.Add("CheckBox");
+
+                    sheet.Cells[1, 1].Value = "ID";
+                    sheet.Cells[1, 2].Value = "Checked";
+
+                    using (var range = sheet.Cells[1, 1, 1, 2])
                     {
-                        result[id] = parts.Length > 2 ? parts[2] : "";
+                        range.Style.Font.Bold = true;
                     }
-                }
-            }
-            catch { }
-            return result;
-        }
 
-        // ===== ЗАГРУЗКА СЧЁТЧИКОВ =====
-        public static Dictionary<string, decimal> LoadCounters()
-        {
-            var result = new Dictionary<string, decimal>();
-            try
-            {
-                string countersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server_counters.txt");
-                if (!File.Exists(countersPath)) return result;
-
-                var lines = File.ReadAllLines(countersPath);
-                foreach (var line in lines)
-                {
-                    var parts = line.Split('|');
-                    if (parts.Length == 2 && decimal.TryParse(parts[1], out decimal value))
+                    int row = 2;
+                    foreach (var kvp in checkboxes)
                     {
-                        result[parts[0]] = value;
+                        sheet.Cells[row, 1].Value = kvp.Key;
+                        sheet.Cells[row, 2].Value = kvp.Value ? "1" : "0";
+                        row++;
                     }
-                }
-            }
-            catch { }
-            return result;
-        }
 
-        // ===== СОХРАНЕНИЕ ВСЕХ ДАННЫХ (ЧЕКБОКСЫ + ЗАМЕТКИ + СЧЁТЧИКИ) =====
-        public static void SaveData(
-            List<ServerInfo> servers,
-            Dictionary<int, bool> checkboxes,
-            Dictionary<int, string> notes,
-            Dictionary<string, decimal> counters)
-        {
-            try
-            {
-                // Сохраняем чекбоксы и заметки
-                var lines = new List<string>();
-                foreach (var server in servers)
-                {
-                    bool isChecked = checkboxes.ContainsKey(server.Id) && checkboxes[server.Id];
-                    string note = notes.ContainsKey(server.Id) ? notes[server.Id] : "";
-                    lines.Add($"{server.Id}|{(isChecked ? "1" : "0")}|{note}");
+                    sheet.Cells.AutoFitColumns();
+                    package.Save();
                 }
-                File.WriteAllLines(_dataPath, lines);
-
-                // Сохраняем счётчики
-                var counterLines = counters.Select(kvp => $"{kvp.Key}|{kvp.Value}").ToList();
-                string countersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server_counters.txt");
-                File.WriteAllLines(countersPath, counterLines);
             }
             catch { }
         }
@@ -162,7 +137,7 @@ namespace DC_Button_Finder
                 new ServerInfo { Id = 16, Name = "XVI. Аэтерис" },
                 new ServerInfo { Id = 17, Name = "XVII. Талас" },
                 new ServerInfo { Id = 18, Name = "XVIII. Наракин" },
-                new ServerInfo { Id = 19, Name = "XIX. Новый сервер" }
+                new ServerInfo { Id = 19, Name = "XIX. Эокс" }
             };
         }
     }

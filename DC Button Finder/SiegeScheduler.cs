@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DC_Button_Finder
 {
@@ -17,29 +18,22 @@ namespace DC_Button_Finder
         private bool _autoStarted = false;
         private bool _isEnabled = true;
         private readonly Random _random = new Random();
-        private bool _launchScheduled = false; // Флаг, что запуск уже запланирован для этой осады
+        private bool _launchScheduled = false;
 
-        // Расписание для серверов (групп)
         private readonly Dictionary<string, List<int>> _serverSchedules = new()
         {
-            // Группа 1:
             { "I.Изначальный мир / V.Гьеди Прайм / XII.Пиксис", new List<int> { 3, 8, 13, 18, 23 } },
-            
-            // Группа 2:
             { "II.Западные территории / VI.Салуса Секундус / XI.Кайтайн / XIII.Вульпекула", new List<int> { 0, 4, 9, 14, 19 } },
-            
-            // Группа 3:
             { "III.Омикрон Прайм / VII.Лас Эквестрия / X.Ахернар / XIV.Эридан", new List<int> { 5, 10, 15, 20, 1 } },
-            
-            // Группа 4:
             { "IV.Оазис Судьбы / VIII.Регис / IX.Ричез", new List<int> { 2, 6, 11, 16, 21 } }
         };
 
-        private const int CHECK_INTERVAL_MS = 30000; // 30 секунд
-        private const int EXTENDED_SIEGE_OFFSET_MINUTES = 30; // Расширенная осада: ±30 минут
+        private const int CHECK_INTERVAL_MS = 30000;
+        private const int EXTENDED_SIEGE_OFFSET_MINUTES = 30;
 
         private string _selectedServer = "IV.Оазис Судьбы / VIII.Регис / IX.Ричез";
         private bool _extendedSiege = false;
+        private Dictionary<int, ScheduledAction> _schedule = new Dictionary<int, ScheduledAction>();
 
         public event Action<string>? OnSiegeStatusChanged;
         public event Action<string>? OnAutoAction;
@@ -81,7 +75,7 @@ namespace DC_Button_Finder
                 }
                 if (!value)
                 {
-                    _launchScheduled = false; // Сбрасываем флаг при отключении
+                    _launchScheduled = false;
                 }
                 _logger.Info($"Планировщик осад: {(value ? "ВКЛ" : "ВЫКЛ")}");
             }
@@ -99,7 +93,50 @@ namespace DC_Button_Finder
             _updateUI = updateUI;
             _siegeTimer = new System.Timers.Timer(CHECK_INTERVAL_MS);
 
+            // Загружаем расписание
+            LoadSchedule();
+
             InitializeTimer();
+        }
+
+        private void LoadSchedule()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "schedule.dat");
+                if (!File.Exists(path)) return;
+
+                _schedule = new Dictionary<int, ScheduledAction>();
+
+                using (var stream = new FileStream(path, FileMode.Open))
+                using (var reader = new BinaryReader(stream))
+                {
+                    int count = reader.ReadInt32();
+                    for (int i = 0; i < count; i++)
+                    {
+                        int hour = reader.ReadInt32();
+                        string server = reader.ReadString();
+                        string action = reader.ReadString();
+                        _schedule[hour] = new ScheduledAction { ServerName = server, Action = action };
+                    }
+                }
+
+                _logger.Info($"Загружено расписание: {_schedule.Count} записей");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка загрузки расписания: {ex.Message}");
+            }
+        }
+
+        public Dictionary<int, ScheduledAction> GetSchedule()
+        {
+            return _schedule;
+        }
+
+        public void RefreshSchedule()
+        {
+            LoadSchedule();
         }
 
         private void InitializeTimer()
@@ -120,36 +157,58 @@ namespace DC_Button_Finder
                 var now = DateTime.Now;
                 var currentTime = now.TimeOfDay;
 
-                // Получаем расписание для текущего сервера
-                var siegeHours = GetSiegeHoursForServer(_selectedServer);
+                // ===== ПРОВЕРКА РАСПИСАНИЯ =====
+                if (_schedule.TryGetValue(now.Hour, out var scheduledAction))
+                {
+                    if (scheduledAction.Action == "Остановить")
+                    {
+                        if (_botController.IsRunning || _autoStarted)
+                        {
+                            _logger.Info($"Остановка по расписанию в {now.Hour:00}:00");
+                            StopAutoBot();
+                        }
+                        return;
+                    }
 
-                // Определяем смещение для расширенных осад
+                    // Переключаем сервер
+                    if (!string.IsNullOrEmpty(scheduledAction.ServerName) && scheduledAction.ServerName != "—")
+                    {
+                        if (_selectedServer != scheduledAction.ServerName)
+                        {
+                            _selectedServer = scheduledAction.ServerName;
+                            _logger.Info($"Сервер переключен на {scheduledAction.ServerName} по расписанию");
+                            OnSiegeStatusChanged?.Invoke($"Сервер изменен на {scheduledAction.ServerName} (по расписанию)");
+                        }
+                    }
+
+                    // Запускаем бота (если не запущен)
+                    if (!_botController.IsRunning && !_autoStarted)
+                    {
+                        _logger.Info($"Запуск бота по расписанию в {now.Hour:00}:00 ({scheduledAction.Action})");
+                        await StartAutoBot();
+                        return;
+                    }
+                }
+
+                // ===== ОБЫЧНАЯ ЛОГИКА ОСАД =====
+                var siegeHours = GetSiegeHoursForServer(_selectedServer);
                 int startOffsetMinutes = _extendedSiege ? EXTENDED_SIEGE_OFFSET_MINUTES : 0;
 
-                // 1. ПРОВЕРЯЕМ НАЧАЛО ОСАДЫ (за 0-180 сек ДО начала)
                 foreach (var siegeHour in siegeHours)
                 {
                     var siegeStartTime = new TimeSpan(siegeHour, 0, 0);
                     var actualStartTime = siegeStartTime - TimeSpan.FromMinutes(startOffsetMinutes);
+                    var checkStartTime = actualStartTime - TimeSpan.FromSeconds(180);
 
-                    // Рассчитываем время, когда нужно начать проверку
-                    var checkStartTime = actualStartTime - TimeSpan.FromSeconds(180); // За 3 минуты до
-
-                    // Если текущее время между checkStartTime и actualStartTime
                     if (currentTime >= checkStartTime && currentTime < actualStartTime)
                     {
-                        // Если ещё не запланировали запуск для этой осады
                         if (!_launchScheduled && !_botController.IsRunning && !_autoStarted)
                         {
-                            // Вычисляем сколько секунд осталось до начала осады
                             var secondsUntilSiege = (actualStartTime - currentTime).TotalSeconds;
-
-                            // Запускаем с рандомной задержкой 0-180 сек, но не позже начала осады
                             int delaySeconds = _random.Next(0, Math.Min(181, (int)secondsUntilSiege + 1));
 
-                            _logger.Info($"Осада в {siegeHour:00}:00. Запуск через {delaySeconds} сек (за {secondsUntilSiege - delaySeconds:F0} сек до начала)");
-
-                            _launchScheduled = true; // Запоминаем, что запуск запланирован
+                            _logger.Info($"Осада в {siegeHour:00}:00. Запуск через {delaySeconds} сек");
+                            _launchScheduled = true;
 
                             if (delaySeconds > 0)
                             {
@@ -162,29 +221,20 @@ namespace DC_Button_Finder
                     }
                 }
 
-                // 2. ПРОВЕРЯЕМ ОКОНЧАНИЕ ОСАДЫ (0-60 сек ПОСЛЕ окончания)
                 foreach (var siegeHour in siegeHours)
                 {
                     int endOffsetMinutes = _extendedSiege ? EXTENDED_SIEGE_OFFSET_MINUTES : 0;
-
-                    // Осада длится 1 час + расширение
                     var siegeEndTime = new TimeSpan((siegeHour + 1) % 24, 0, 0);
                     if (siegeEndTime == TimeSpan.Zero) siegeEndTime = new TimeSpan(24, 0, 0);
 
                     var actualEndTime = siegeEndTime + TimeSpan.FromMinutes(endOffsetMinutes);
+                    var checkEndTime = actualEndTime + TimeSpan.FromSeconds(60);
 
-                    var checkEndTime = actualEndTime + TimeSpan.FromSeconds(60); // 60 сек после окончания
-
-                    // Если текущее время между окончанием осады и checkEndTime
                     if (currentTime >= actualEndTime && currentTime < checkEndTime)
                     {
-                        // И бот еще работает
                         if (_botController.IsRunning && _autoStarted)
                         {
-                            // Вычисляем сколько секунд прошло после окончания
                             var secondsAfterSiege = (currentTime - actualEndTime).TotalSeconds;
-
-                            // Останавливаем с рандомной задержкой 0-60 сек
                             int remainingDelay = _random.Next(0, 61 - (int)secondsAfterSiege);
 
                             _logger.Info($"Осада закончилась в {actualEndTime:hh\\:mm}. Остановка через {remainingDelay} сек");
@@ -210,8 +260,6 @@ namespace DC_Button_Finder
         {
             if (_serverSchedules.TryGetValue(server, out var hours))
                 return hours;
-
-            // По умолчанию возвращаем расписание
             return _serverSchedules["IV.Оазис Судьбы / VIII.Регис / IX.Ричез"];
         }
 
@@ -220,7 +268,7 @@ namespace DC_Button_Finder
             try
             {
                 _autoStarted = true;
-                _launchScheduled = false; // Сбрасываем флаг после запуска
+                _launchScheduled = false;
                 OnSiegeStatusChanged?.Invoke("Обнаружено начало осады");
                 OnAutoAction?.Invoke("Автоматический запуск бота");
 
@@ -252,7 +300,7 @@ namespace DC_Button_Finder
                 _botController.Stop();
                 _updateUI(false);
                 _autoStarted = false;
-                _launchScheduled = false; // Сбрасываем флаг при остановке
+                _launchScheduled = false;
 
                 _logger.Success("Бот автоматически остановлен по окончанию осады");
                 OnSiegeStatusChanged?.Invoke("Бот остановлен автоматически");
@@ -287,22 +335,17 @@ namespace DC_Button_Finder
         public bool IsSiegeTimeNow()
         {
             var now = DateTime.Now;
-            int currentHour = now.Hour;
-            int currentMinute = now.Minute;
-
+            var currentTime = now.TimeOfDay;
             var siegeHours = GetSiegeHoursForServer(_selectedServer);
             int offsetMinutes = _extendedSiege ? EXTENDED_SIEGE_OFFSET_MINUTES : 0;
 
             foreach (var siegeHour in siegeHours)
             {
-                // Начало осады с учётом смещения
                 var startTime = new TimeSpan(siegeHour, 0, 0) - TimeSpan.FromMinutes(offsetMinutes);
-                // Конец осады с учётом смещения
                 var endHour = (siegeHour + 1) % 24;
                 var endTime = new TimeSpan(endHour, 0, 0) + TimeSpan.FromMinutes(offsetMinutes);
                 if (endTime == TimeSpan.Zero) endTime = new TimeSpan(24, 0, 0);
 
-                var currentTime = now.TimeOfDay;
                 if (currentTime >= startTime && currentTime < endTime)
                 {
                     return true;
@@ -319,7 +362,6 @@ namespace DC_Button_Finder
 
             var siegeHours = GetSiegeHoursForServer(_selectedServer);
 
-            // Находим ближайшую осаду сегодня
             var nextSiegeToday = siegeHours
                 .Select(h => new TimeSpan(h, 0, 0) - TimeSpan.FromMinutes(offsetMinutes))
                 .Where(t => t > currentTime)
@@ -331,7 +373,6 @@ namespace DC_Button_Finder
                 return nextSiegeToday - currentTime;
             }
 
-            // Если осад сегодня больше не будет, берем первую завтра
             var firstSiegeTomorrow = new TimeSpan(siegeHours[0], 0, 0) - TimeSpan.FromMinutes(offsetMinutes);
             return (firstSiegeTomorrow + TimeSpan.FromDays(1)) - currentTime;
         }
@@ -350,7 +391,6 @@ namespace DC_Button_Finder
 
             var siegeHours = GetSiegeHoursForServer(_selectedServer);
 
-            // Проверяем, идет ли сейчас осада
             foreach (var siegeHour in siegeHours)
             {
                 var startTime = new TimeSpan(siegeHour, 0, 0) - TimeSpan.FromMinutes(offsetMinutes);
@@ -358,20 +398,16 @@ namespace DC_Button_Finder
                 var endTime = new TimeSpan(endHour, 0, 0) + TimeSpan.FromMinutes(offsetMinutes);
                 if (endTime == TimeSpan.Zero) endTime = new TimeSpan(24, 0, 0);
 
-                // Если текущее время в пределах осады
                 if (currentTime >= startTime && currentTime < endTime)
                 {
-                    // Осада идет - считаем сколько осталось
-                    var timeRemaining = endTime - currentTime;
                     return new SiegeTimeInfo
                     {
                         IsSiegeActive = true,
-                        TimeRemaining = timeRemaining
+                        TimeRemaining = endTime - currentTime
                     };
                 }
             }
 
-            // Осады нет - считаем до следующей
             return new SiegeTimeInfo
             {
                 IsSiegeActive = false,
@@ -392,5 +428,11 @@ namespace DC_Button_Finder
         public int EndHour { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+    }
+
+    public class ScheduledAction
+    {
+        public string ServerName { get; set; } = "";
+        public string Action { get; set; } = "";
     }
 }
